@@ -1,0 +1,176 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// Layout.astro — master wrapper for every page
+// Spec: plan/plan.md lines 172-218
+// Includes: SEO meta, OG tags, JSON-LD, GA4 stub, fonts, Header/Footer,
+// scroll-reveal + header-height + parallax scripts
+// ═══════════════════════════════════════════════════════════════
+import '../styles/globals.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface FaqItem { q: string; a: string; }
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  faq?: FaqItem[];
+  schema?: Record<string, unknown>;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  ogImage = '/assets/logos/Boums.png',
+  faq = [],
+  schema,
+  noindex = false,
+} = Astro.props;
+
+const canonicalUrl = Astro.url.href;
+// GA4 measurement ID — placeholder until user provides real ID
+const GA_ID = 'G-XXXXXXXXXX';
+
+const faqJsonLd = faq.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+} : null;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <!-- Primary meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.url).href} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Mon Boum" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.url).href} />
+
+    <!-- Theme color (for PWA / Android tabs) -->
+    <meta name="theme-color" content="#111111" />
+
+    <!-- Fonts — preconnect + swap display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap"
+    />
+
+    <!-- JSON-LD (FAQ) -->
+    {faqJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    )}
+
+    <!-- JSON-LD (custom schema, e.g. LocalBusiness per enseigne) -->
+    {schema && (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    )}
+
+    <!-- GA4 (only loads in production, and respects Do-Not-Track) -->
+    {import.meta.env.PROD && GA_ID !== 'G-XXXXXXXXXX' && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+        <script is:inline define:vars={{ GA_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', GA_ID, { anonymize_ip: true });
+        </script>
+      </>
+    )}
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">Aller au contenu principal</a>
+
+    <Header />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      // ── Scroll reveal (IntersectionObserver) ──────────────────
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (!mq.matches) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.07 }
+        );
+        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+      } else {
+        // Reduced motion → mark everything visible immediately
+        document.querySelectorAll('[data-reveal]').forEach((el) => {
+          el.classList.add('visible');
+        });
+      }
+
+      // ── Header height CSS var (drives --hh for all hero padding-top) ──
+      function setHeaderHeight() {
+        const hdr = document.querySelector('header');
+        if (hdr) {
+          document.documentElement.style.setProperty('--hh', `${hdr.offsetHeight}px`);
+        }
+      }
+      setHeaderHeight();
+      window.addEventListener('resize', setHeaderHeight, { passive: true });
+
+      // ── Parallax (respects reduced motion) ────────────────────
+      if (!mq.matches) {
+        const parallaxEls = document.querySelectorAll<HTMLElement>('[data-parallax]');
+        if (parallaxEls.length > 0) {
+          window.addEventListener(
+            'scroll',
+            () => {
+              const y = window.scrollY;
+              parallaxEls.forEach((el) => {
+                const speed = parseFloat(el.dataset.parallax || '0.15');
+                el.style.transform = `translateY(${y * speed}px)`;
+              });
+            },
+            { passive: true }
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

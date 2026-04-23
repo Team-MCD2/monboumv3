@@ -1,0 +1,36 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// GrungeSeparator — Plan rule #04: between every dark↔light transition
+// Spec: plan/plan.md lines 75-92
+// ═══════════════════════════════════════════════════════════════
+
+interface Props {
+  /**
+   * When true, grunge tears DOWNWARD from a dark section onto a light one below.
+   * When false, grunge tears UPWARD from a light section onto a dark one below.
+   * Default true = after a dark section.
+   */
+  fromDark?: boolean;
+}
+
+const { fromDark = true } = Astro.props;
+---
+
+<div
+  class:list={[
+    'relative overflow-hidden h-8 pointer-events-none select-none',
+    fromDark ? '-mt-1' : '-mb-1',
+  ]}
+  aria-hidden="true"
+>
+  <img
+    src="/assets/shapes/welcome_grunge_shape-min-1024x15.png"
+    alt=""
+    class:list={[
+      'absolute inset-x-0 w-full h-full object-cover object-top',
+      fromDark ? 'top-0' : 'bottom-0 rotate-180',
+    ]}
+    loading="lazy"
+    decoding="async"
+  />
+</div>

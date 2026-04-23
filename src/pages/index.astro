@@ -1,0 +1,315 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// Home — Mon Boum V3
+// Spec: plan/plan.md Ordre d'Exécution 3 + sections 330-460
+// 7 sections + 4 React islands
+// ═══════════════════════════════════════════════════════════════
+import Layout from '../layouts/Layout.astro';
+import GrungeSeparator from '../components/GrungeSeparator.astro';
+import HeroRotator from '../components/islands/HeroRotator.jsx';
+import TestimonialsSlider from '../components/islands/TestimonialsSlider.jsx';
+import PromoScroller from '../components/islands/PromoScroller.jsx';
+import TikTokFacade from '../components/islands/TikTokFacade.jsx';
+import { ENSEIGNES } from '../data/restaurants.js';
+
+const title =
+  'Mon Boum Toulouse — Fast-Food Halal Depuis 2004 | Burger, Pizza, Chicken';
+const description =
+  'Le meilleur du Street-Food halal à Toulouse depuis 2004. Découvrez nos burgers, pizzas, chickens et kebabs dans 10 restaurants sur la métropole toulousaine.';
+---
+
+<Layout title={title} description={description}>
+  {/* ═══════════════ 1. HERO ═══════════════ */}
+  <section
+    class="relative texture-bg overflow-hidden"
+    style="padding-top: var(--hh); min-height: calc(100vh - 40px);"
+  >
+    {/* Background decorative shapes — parallax driven by Layout script */}
+    <img
+      src="/assets/shapes/shape1-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-24 -left-12 w-48 md:w-64 opacity-10 spin-slow"
+      data-parallax="0.15"
+    />
+    <img
+      src="/assets/shapes/shape2-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute bottom-24 right-8 w-32 md:w-48 opacity-20 float-anim"
+      data-parallax="0.2"
+    />
+
+    <div class="container-wide relative z-10 min-h-[calc(100vh-110px)] flex items-center py-12 lg:py-16">
+      <HeroRotator client:load />
+    </div>
+
+    {/* Red bottom banner — verbatim from monboum.fr */}
+    <div class="relative z-20 bg-rouge py-3 overflow-hidden">
+      <div class="marquee-inner font-display text-white uppercase text-sm md:text-base tracking-wider">
+        {Array.from({ length: 6 }).map(() => (
+          <span class="mx-8 whitespace-nowrap">
+            Le meilleur du street-food <span class="opacity-80">👍</span>
+            <span class="mx-4">·</span>
+            Faites-vous livrer de votre canapé <span class="opacity-80">;)</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={true} />
+
+  {/* ═══════════════ 2. BIENVENUE / BON APPÉTIT ═══════════════ */}
+  <section class="bg-white py-20 md:py-28">
+    <div class="container-wide">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div data-reveal>
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Bienvenue
+          </p>
+          <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-6">
+            Bon <span class="text-rouge">appétit.</span>
+          </h2>
+          <p class="font-body text-lg text-noir/70 leading-relaxed mb-8">
+            Depuis 2004, le groupe <strong>« Mon Boum »</strong> est présent sur
+            la région toulousaine avec 10 restaurants. Un concept qui marche.
+          </p>
+          <a
+            href="/mon-boum"
+            class="inline-block bg-noir text-white font-display uppercase text-sm px-8 py-4 hover:bg-rouge transition-colors"
+          >
+            En savoir plus
+          </a>
+        </div>
+
+        <div class="relative" data-reveal data-d="2">
+          <img
+            src="/assets/banners/welcome_image.png"
+            alt="Mon Boum depuis 2004"
+            class="w-full h-auto max-w-md mx-auto"
+            loading="lazy"
+          />
+          <img
+            src="/assets/shapes/shape3-min.png"
+            alt=""
+            aria-hidden="true"
+            class="absolute top-0 right-0 w-20 md:w-32 opacity-60 float-anim"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ 3. FAITES VOTRE CHOIX (4 enseignes) ═══════════════ */}
+  <section class="bg-gris py-20 md:py-28">
+    <div class="container-wide">
+      <div class="text-center mb-16" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Nos enseignes
+        </p>
+        <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none">
+          Faites <span class="text-rouge">votre choix.</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        {Object.values(ENSEIGNES).map((enseigne, i) => {
+          const imgMap = {
+            'boum-burger': '/assets/banners/Boum-Burgers.png',
+            'boum-pizzs': '/assets/banners/BOUM-Pizzs.png',
+            'boum-chicken': '/assets/banners/Boum-Chicken.png',
+            'boum-saveurs': '/assets/banners/Boum-Saveurs.png',
+          };
+          return (
+            <a
+              href={enseigne.path}
+              class="group block bg-white p-8 hover:shadow-xl transition-shadow relative overflow-hidden"
+              data-reveal
+              data-d={String(i + 1)}
+            >
+              <div class="aspect-square flex items-center justify-center mb-4 img-zoom">
+                <img
+                  src={imgMap[enseigne.slug]}
+                  alt={enseigne.nom}
+                  class="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <h3 class="font-display text-xl md:text-2xl text-noir uppercase group-hover:text-rouge transition-colors">
+                {enseigne.nom}
+              </h3>
+              <p class="font-body text-xs text-noir/60 mt-1">{enseigne.label}</p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ 4. QUALITÉ / TRAÇABILITÉ ═══════════════ */}
+  <section class="bg-white py-20 md:py-28">
+    <div class="container-wide">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="order-2 lg:order-1 relative" data-reveal>
+          <img
+            src="/assets/banners/BOUM-BURGER-SINCE.png"
+            alt="Qualité Mon Boum depuis 2004"
+            class="w-full h-auto max-w-lg mx-auto"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="order-1 lg:order-2" data-reveal data-d="2">
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Notre engagement
+          </p>
+          <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-8">
+            Qualité, saveur<br />
+            <span class="text-rouge">et traçabilité.</span>
+          </h2>
+          <ul class="space-y-3 font-body text-noir/70">
+            <li class="flex items-start gap-3">
+              <span class="text-rouge font-bold mt-1">→</span>
+              <span>Viandes 100% halal certifiées</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-rouge font-bold mt-1">→</span>
+              <span>Produits frais, sélection rigoureuse</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-rouge font-bold mt-1">→</span>
+              <span>Pain artisanal, préparations maison</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-rouge font-bold mt-1">→</span>
+              <span>Traçabilité complète de la ferme à l'assiette</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={false} />
+
+  {/* ═══════════════ 5. LIVRAISON ═══════════════ */}
+  <section class="texture-bg-deep py-20 md:py-28 relative overflow-hidden">
+    <img
+      src="/assets/shapes/shape2-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-12 left-12 w-32 opacity-10 float-anim"
+      data-parallax="0.1"
+    />
+    <div class="container-wide relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div data-reveal>
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Nous arrivons chez vous 🙂
+          </p>
+          <h2 class="font-display text-5xl md:text-6xl text-white uppercase leading-none mb-8">
+            Le meilleur<br />
+            du <span class="text-rouge">Street Food</span><br />
+            livré chez vous.
+          </h2>
+          <a
+            href="https://monboum.commande.deliveroo.fr/fr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block bg-rouge text-white font-display uppercase text-base px-10 py-5 hover:bg-white hover:text-rouge transition-colors"
+          >
+            Commander
+          </a>
+        </div>
+
+        <div class="relative" data-reveal data-d="2">
+          <img
+            src="/assets/banners/Commandez.png"
+            alt="Livraison Deliveroo — Mon Boum"
+            class="w-full h-auto max-w-md mx-auto float-anim"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ 6. PROMOS (scroller) ═══════════════ */}
+  <section class="bg-gris py-20 md:py-28">
+    <div class="container-wide mb-12">
+      <div data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Offres du moment
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none">
+          Nos <span class="text-rouge">promos.</span>
+        </h2>
+      </div>
+    </div>
+
+    <div data-reveal data-d="2">
+      <PromoScroller client:visible />
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={false} />
+
+  {/* ═══════════════ 7. TÉMOIGNAGES ═══════════════ */}
+  <section class="texture-bg py-20 md:py-28 relative overflow-hidden">
+    <img
+      src="/assets/shapes/shape1-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-0 right-0 w-64 opacity-5 spin-slow"
+      data-parallax="0.1"
+    />
+    <div class="container-wide relative z-10">
+      <div class="text-center mb-16" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Ils nous ont
+        </p>
+        <h2 class="font-display text-5xl md:text-6xl text-white uppercase leading-none">
+          Validé.
+        </h2>
+      </div>
+
+      <div data-reveal data-d="2">
+        <TestimonialsSlider client:visible />
+      </div>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={true} />
+
+  {/* ═══════════════ 8. TIKTOKS ═══════════════ */}
+  <section class="bg-white py-20 md:py-28">
+    <div class="container-wide">
+      <div class="text-center mb-16" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Suivez-nous
+        </p>
+        <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-4">
+          Réseaux <span class="text-rouge">sociaux.</span>
+        </h2>
+        <p class="font-body text-noir/60">
+          Les dernières vidéos de{' '}
+          <a
+            href="https://www.tiktok.com/@boumchickentoulouse"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-rouge hover:underline"
+          >
+            @boumchickentoulouse
+          </a>
+        </p>
+      </div>
+
+      <div data-reveal data-d="2">
+        <TikTokFacade client:visible />
+      </div>
+    </div>
+  </section>
+</Layout>
+
+

@@ -1,0 +1,30 @@
+{
+  "name": "monboum-v3",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mon Boum V3 — Fast-food halal Toulouse — Astro + Tailwind + React",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.18.1",
+    "@astrojs/tailwind": "^6.0.2",
+    "@astrojs/react": "^4.3.0",
+    "@astrojs/sitemap": "^3.7.0",
+    "tailwindcss": "^3.4.17",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1"
+  },
+  "engines": {
+    "node": ">=18.17.1"
+  }
+}
