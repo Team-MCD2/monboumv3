@@ -1,0 +1,19 @@
+{
+  "name": "Mon Boum — Fast-Food Halal Toulouse",
+  "short_name": "Mon Boum",
+  "description": "Le meilleur du Street-Food halal à Toulouse depuis 2004. Burger, Pizza, Chicken, Kebab dans 10 restaurants.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#E10600",
+  "lang": "fr-FR",
+  "icons": [
+    {
+      "src": "/assets/logos/logo-boum-2.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["food", "restaurant", "lifestyle"]
+}

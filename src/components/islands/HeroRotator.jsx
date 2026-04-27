@@ -6,6 +6,7 @@
 // Respects prefers-reduced-motion: if reduce, shows slide 0 only, static.
 // ═══════════════════════════════════════════════════════════════
 import { useEffect, useState, useRef } from 'react';
+import ErrorBoundary from './_ErrorBoundary.jsx';
 
 const SLIDES = [
   {
@@ -30,7 +31,33 @@ const SLIDES = [
 
 const ROTATION_MS = 5000;
 
-export default function HeroRotator() {
+// ── Fallback shown if the rotator throws at runtime ────────────
+function HeroFallback() {
+  return (
+    <div className="relative w-full h-full flex flex-col justify-center">
+      <p className="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+        Mon Boum · Toulouse · Halal
+      </p>
+      <h1 className="font-display text-white uppercase leading-[0.9] text-5xl md:text-7xl lg:text-8xl">
+        LE MEILLEUR DU STREET-FOOD
+        <br />
+        <span className="text-rouge">HALAL.</span>
+      </h1>
+      <div className="mt-8">
+        <a
+          href="https://monboum.commande.deliveroo.fr/fr/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-rouge text-white font-display uppercase text-base px-8 py-4"
+        >
+          Commander
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function HeroRotatorImpl() {
   const [index, setIndex] = useState(0);
   const [reduced, setReduced] = useState(false);
   const timerRef = useRef(null);
@@ -148,5 +175,14 @@ export default function HeroRotator() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function HeroRotator() {
+  const fallback = <HeroFallback />;
+  return (
+    <ErrorBoundary fallback={fallback}>
+      <HeroRotatorImpl />
+    </ErrorBoundary>
   );
 }

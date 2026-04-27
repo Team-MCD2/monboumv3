@@ -9,6 +9,9 @@ export default {
         'noir-deep': '#0A0A0A',
         blanc: '#FFFFFF',
         gris: '#F4F4F4',
+        jaune: '#FFB800',
+        orange: '#FF6A00',
+        vert: '#2E7D32',
       },
       fontFamily: {
         display: ['Anton', 'Impact', 'sans-serif'],

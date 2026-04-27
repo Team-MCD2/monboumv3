@@ -175,3 +175,60 @@ export const getRestaurant = (id) => RESTAURANTS.find((r) => r.id === id);
 
 /** Total count for copy harmonization (issue 2.15) */
 export const TOTAL_RESTAURANTS = RESTAURANTS.length; // 10
+
+// ═══════════════════════════════════════════════════════════════
+// JSON-LD SCHEMA HELPERS (for local SEO rich-results eligibility)
+// ═══════════════════════════════════════════════════════════════
+
+/** Convert '05 61 40 77 73' → '+33561407773' for schema.org compliance */
+const toE164 = (tel) => (tel ? `+33${tel.replace(/\s/g, '').replace(/^0/, '')}` : undefined);
+
+/**
+ * Build a FastFoodRestaurant schema entry for one location.
+ * Reference: https://schema.org/FastFoodRestaurant
+ */
+export const buildRestaurantSchema = (r, siteUrl = 'https://mon-boum.vercel.app') => {
+  const enseigne = ENSEIGNES[r.enseigne];
+  return {
+    '@type': 'FastFoodRestaurant',
+    '@id': `${siteUrl}${enseigne.path}#${r.id}`,
+    name: `${enseigne.nom} ${r.nom}`,
+    image: `${siteUrl}/assets/logos/Boums.png`,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: r.adresse,
+      postalCode: r.cp,
+      addressLocality: r.ville,
+      addressRegion: 'Occitanie',
+      addressCountry: 'FR',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: r.coords[0],
+      longitude: r.coords[1],
+    },
+    ...(r.tel && { telephone: toE164(r.tel) }),
+    url: `${siteUrl}${enseigne.path}`,
+    priceRange: '€',
+    servesCuisine: 'Halal',
+    acceptsReservations: false,
+    ...(r.horaires && { openingHours: r.horaires }),
+  };
+};
+
+/**
+ * Build a full @graph schema block for a given enseigne's locations.
+ * Use this as the `schema` prop on each /boum-* page.
+ */
+export const buildEnseigneGraph = (enseigneSlug, siteUrl) => ({
+  '@context': 'https://schema.org',
+  '@graph': byEnseigne(enseigneSlug).map((r) => buildRestaurantSchema(r, siteUrl)),
+});
+
+/**
+ * Build a full @graph schema block for ALL 10 locations (used on /nos-restaurants).
+ */
+export const buildAllRestaurantsGraph = (siteUrl) => ({
+  '@context': 'https://schema.org',
+  '@graph': RESTAURANTS.map((r) => buildRestaurantSchema(r, siteUrl)),
+});

@@ -10,7 +10,7 @@ const currentPath = Astro.url.pathname;
 const navLinks = [
   { href: '/mon-boum', label: 'Mon Boum' },
   { href: '/nos-restaurants', label: 'Nos Restaurants', hasDropdown: true },
-  { href: '/franchise', label: 'Devenir Franchisé' },
+  { href: '/formulaire-de-candidature', label: 'Devenir Franchisé' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -34,7 +34,7 @@ const enseignes = [
         <img
           src="/assets/logos/logo-mon-boum-home.png"
           alt="Mon Boum"
-          class="h-8 md:h-10 w-auto"
+          class="h-[52px] md:h-[64px] max-h-full w-auto object-contain"
           width="160"
           height="40"
         />
@@ -156,23 +156,47 @@ const enseignes = [
   const menu = document.getElementById('mobile-menu');
   const spans = toggleBtn?.querySelectorAll('span');
 
+  function setMenuOpen(open: boolean) {
+    if (!menu || !toggleBtn || !spans) return;
+    menu.classList.toggle('translate-x-full', !open);
+    menu.setAttribute('aria-hidden', String(!open));
+    toggleBtn.setAttribute('aria-expanded', String(open));
+    toggleBtn.setAttribute(
+      'aria-label',
+      open ? 'Fermer le menu' : 'Ouvrir le menu'
+    );
+    // Burger → X animation (only when open, reset otherwise)
+    spans[0].classList.toggle('rotate-45', open);
+    spans[0].classList.toggle('translate-y-2', open);
+    spans[1].classList.toggle('opacity-0', open);
+    spans[2].classList.toggle('-rotate-45', open);
+    spans[2].classList.toggle('-translate-y-2', open);
+
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
   if (toggleBtn && menu && spans) {
     toggleBtn.addEventListener('click', () => {
-      const isOpen = menu.classList.toggle('translate-x-full');
-      const nowOpen = !isOpen;
+      const isCurrentlyClosed = menu.classList.contains('translate-x-full');
+      setMenuOpen(isCurrentlyClosed);
+    });
 
-      menu.setAttribute('aria-hidden', String(!nowOpen));
-      toggleBtn.setAttribute('aria-expanded', String(nowOpen));
-      toggleBtn.setAttribute('aria-label', nowOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+    // Polish: auto-close the mobile menu when any link inside it is clicked.
+    // Astro does full page navigation, so the menu would close on load anyway,
+    // but optimistic close makes the transition feel snappy.
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMenuOpen(false));
+    });
 
-      // Burger → X animation
-      spans[0].classList.toggle('rotate-45');
-      spans[0].classList.toggle('translate-y-2');
-      spans[1].classList.toggle('opacity-0');
-      spans[2].classList.toggle('-rotate-45');
-      spans[2].classList.toggle('-translate-y-2');
-
-      document.body.style.overflow = nowOpen ? 'hidden' : '';
+    // Also close on Escape key for keyboard users
+    document.addEventListener('keydown', (e) => {
+      if (
+        e.key === 'Escape' &&
+        !menu.classList.contains('translate-x-full')
+      ) {
+        setMenuOpen(false);
+        toggleBtn.focus();
+      }
     });
   }
 </script>

@@ -1,0 +1,242 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// /mon-boum — « Pourquoi choisir Mon Boum ? »
+// Franchise page mirrored from monboum.fr/mon-boum-cest-quoi/
+// Content: verbatim from the live site (2026-04-23 scrape)
+// Asset: /assets/videos/Boum-Franchise.mp4 (44.6 MB, Pass B)
+// ═══════════════════════════════════════════════════════════════
+import Layout from '../layouts/Layout.astro';
+import GrungeSeparator from '../components/GrungeSeparator.astro';
+import { TOTAL_RESTAURANTS } from '../data/restaurants.js';
+
+const title = 'Mon Boum c\'est quoi ? — Devenir Franchisé Fast-Food Halal | Mon Boum Toulouse';
+const description =
+  'Depuis 2004, Mon Boum est le 1er réseau de Fast-Food halal sur la métropole toulousaine. Découvrez notre concept et comment devenir franchisé.';
+
+const CHIFFRES = [
+  { value: '25 000 € HT', label: 'Droit d\'entrée', note: '(hors pas de porte)' },
+  { value: '5 ans', label: 'Délai du contrat' },
+  { value: '15 000 € HT', label: 'Formation' },
+  { value: '5 %', label: 'Redevance franchise' },
+  { value: '2 %', label: 'Redevance communication' },
+  { value: `${TOTAL_RESTAURANTS} restaurants`, label: 'Actuellement' },
+];
+
+const ETAPES = [
+  {
+    n: '1',
+    title: 'Candidature',
+    text: "Pour déposer votre candidature, veuillez remplir le formulaire à cet effet.",
+  },
+  {
+    n: '2',
+    title: 'Validation',
+    text: "Nous vous recontactons pour valider votre profil et se rencontrer.",
+  },
+  {
+    n: '3',
+    title: 'Réalisation',
+    text: "C'est parti, nous avançons ensemble sur la réalisation du projet.",
+  },
+];
+---
+
+<Layout title={title} description={description}>
+  {/* ═══════════════ HERO ═══════════════ */}
+  <section
+    class="relative texture-bg overflow-hidden"
+    style="padding-top: var(--hh);"
+  >
+    <img
+      src="/assets/shapes/shape1-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-24 -left-12 w-48 md:w-64 opacity-10 spin-slow"
+      data-parallax="0.15"
+    />
+
+    <div class="container-wide relative z-10 py-20 md:py-28">
+      <p class="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-4">
+        Mon Boum · Depuis 2004
+      </p>
+      <h1 class="rise-2 font-display text-white uppercase leading-[0.9] text-5xl md:text-7xl lg:text-8xl max-w-4xl">
+        Pourquoi choisir<br />
+        <span class="text-rouge">Mon Boum ?</span>
+      </h1>
+      <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-8 max-w-2xl">
+        Historiquement, <strong class="text-white">Boum Burger est le 1er drive
+        Fast-Food Halal de France</strong>. Un réseau, une logistique et un savoir-faire
+        dans le monde du Street-Food.
+      </p>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={true} />
+
+  {/* ═══════════════ FRANCHISE VIDEO ═══════════════ */}
+  <section class="bg-white py-20 md:py-28">
+    <div class="container-wide">
+      <div class="text-center mb-12" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Découvrez le concept
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none">
+          La <span class="text-rouge">Boum Team</span>.
+        </h2>
+      </div>
+
+      <div class="relative max-w-4xl mx-auto" data-reveal data-d="2">
+        <video
+          controls
+          preload="metadata"
+          poster="/assets/banners/Boums.png"
+          class="w-full h-auto rounded-lg shadow-2xl"
+        >
+          <source src="/assets/videos/Boum-Franchise.mp4" type="video/mp4" />
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ UN CONCEPT QUI MARCHE ═══════════════ */}
+  <section class="bg-gris py-20 md:py-28">
+    <div class="container-wide">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div data-reveal>
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Un concept qui marche
+          </p>
+          <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6">
+            Entre <span class="text-rouge">500 000 €</span><br />
+            et <span class="text-rouge">1 500 000 €</span>
+          </h2>
+          <p class="font-body text-sm text-noir/60 mb-6">
+            de chiffre d'affaires par restaurant — résultat en N+2
+          </p>
+          <div class="space-y-4 font-body text-noir/70">
+            <p>
+              Rejoindre un réseau avec de l'expérience. Mon Boum existe depuis
+              <strong>2004</strong> et s'appuie sur un savoir-faire affiné, adapté
+              au marché actuel.
+            </p>
+            <p>
+              Un accompagnement dans toutes les étapes de la réalisation de votre
+              restaurant : aide au suivi de chantier, matériel, lancement, formation
+              du personnel — en vous faisant bénéficier de notre expérience.
+            </p>
+            <p>
+              Une <strong>sélection de produits</strong> et une
+              <strong>centrale d'achat</strong> à votre service.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative" data-reveal data-d="2">
+          <img
+            src="/assets/banners/welcome_image.png"
+            alt="Mon Boum — savoir-faire depuis 2004"
+            class="w-full h-auto max-w-md mx-auto"
+            loading="lazy"
+          />
+          <img
+            src="/assets/shapes/shape2-min.png"
+            alt=""
+            aria-hidden="true"
+            class="absolute -top-4 -right-4 w-24 md:w-32 opacity-60 float-anim"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ EN QUELQUES CHIFFRES ═══════════════ */}
+  <section class="bg-white py-20 md:py-28">
+    <div class="container-wide">
+      <div class="text-center mb-16" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Le réseau
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none">
+          En quelques <span class="text-rouge">chiffres</span>.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+        {CHIFFRES.map((c, i) => (
+          <div
+            class="bg-gris p-8 text-center hover:bg-noir hover:text-white transition-colors group"
+            data-reveal
+            data-d={String(Math.min(i + 1, 4))}
+          >
+            <p class="font-display text-3xl md:text-4xl text-rouge uppercase leading-tight mb-2">
+              {c.value}
+            </p>
+            <p class="font-body text-sm text-noir/70 group-hover:text-white/70 uppercase tracking-wider">
+              {c.label}
+            </p>
+            {c.note && (
+              <p class="font-body text-xs text-noir/40 group-hover:text-white/40 mt-1 italic">
+                {c.note}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={false} />
+
+  {/* ═══════════════ DEVENIR FRANCHISÉ ═══════════════ */}
+  <section class="texture-bg-deep py-20 md:py-28 relative overflow-hidden">
+    <img
+      src="/assets/shapes/shape3-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-16 right-16 w-32 opacity-10 float-anim"
+      data-parallax="0.1"
+    />
+
+    <div class="container-wide relative z-10">
+      <div class="text-center mb-16" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          La démarche
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-white uppercase leading-none">
+          Comment devenir<br />
+          <span class="text-rouge">franchisé ?</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+        {ETAPES.map((etape, i) => (
+          <div
+            class="text-center relative"
+            data-reveal
+            data-d={String(i + 1)}
+          >
+            <p class="font-display text-7xl md:text-8xl text-rouge opacity-20 absolute -top-8 left-1/2 -translate-x-1/2 z-0">
+              {etape.n}
+            </p>
+            <div class="relative z-10 pt-12">
+              <h3 class="font-display text-2xl md:text-3xl text-white uppercase mb-4">
+                {etape.title}
+              </h3>
+              <p class="font-body text-white/70">{etape.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="text-center" data-reveal data-d="4">
+        <a
+          href="/formulaire-de-candidature"
+          class="inline-block bg-rouge text-white font-display uppercase text-base md:text-lg px-10 md:px-12 py-5 hover:bg-white hover:text-rouge transition-colors"
+        >
+          Devenir franchisé
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

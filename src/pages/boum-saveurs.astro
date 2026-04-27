@@ -1,0 +1,190 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// /boum-saveurs — Enseigne Boum Saveurs (1 location, Mermoz)
+// Concept: Kebab & Naans
+// Hero banner: Boum-Saveurs.png (round badge from Pass B)
+// ═══════════════════════════════════════════════════════════════
+import Layout from '../layouts/Layout.astro';
+import GrungeSeparator from '../components/GrungeSeparator.astro';
+import { byEnseigne, ENSEIGNES } from '../data/restaurants.js';
+
+const enseigne = ENSEIGNES['boum-saveurs'];
+const locations = byEnseigne('boum-saveurs');
+const loc = locations[0]; // only 1 — Mermoz
+
+const title = `${enseigne.nom} Toulouse Mermoz — Kebab & Naans Halal | Mon Boum`;
+const description =
+  "Boum Saveurs Mermoz : kebabs et naans halal à Toulouse. L'authenticité du Street-Food oriental, signée Mon Boum.";
+---
+
+<Layout title={title} description={description}>
+  {/* ═══════════════ HERO ═══════════════ */}
+  <section
+    class="relative texture-bg overflow-hidden"
+    style="padding-top: var(--hh);"
+  >
+    <img
+      src="/assets/shapes/shape3-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-24 -left-12 w-48 md:w-64 opacity-10 spin-slow"
+      data-parallax="0.15"
+    />
+    <img
+      src="/assets/shapes/shape1-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute bottom-24 right-8 w-32 md:w-48 opacity-20 float-anim"
+      data-parallax="0.2"
+    />
+
+    <div class="container-wide relative z-10 py-16 md:py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-4">
+            {enseigne.label}
+          </p>
+          <h1 class="rise-2 font-display text-white uppercase leading-[0.9] text-5xl md:text-7xl lg:text-8xl">
+            BOUM<br />
+            <span class="text-rouge">SAVEURS.</span>
+          </h1>
+          <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-6 max-w-lg">
+            <strong class="text-white">Kebabs et naans halal</strong>, façon
+            Street-Food oriental — un nouvel art de vivre, signé Mon Boum.
+          </p>
+
+          <div class="rise-4 mt-8 flex flex-wrap gap-4">
+            <a
+              href="https://monboum.commande.deliveroo.fr/fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+            >
+              Commander
+            </a>
+            <a
+              href="#location"
+              class="border border-white/30 text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+            >
+              Voir adresse
+            </a>
+          </div>
+        </div>
+
+        <div class="relative img-zoom flex items-center justify-center">
+          <img
+            src="/assets/banners/Boum-Saveurs.png"
+            alt="Boum Saveurs — Kebab & Naans"
+            class="w-full h-auto max-w-md"
+            loading="eager"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={true} />
+
+  {/* ═══════════════ CONCEPT ═══════════════ */}
+  <section class="bg-white py-20 md:py-28">
+    <div class="container-wide">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div data-reveal>
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Notre concept
+          </p>
+          <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6">
+            L'<span class="text-rouge">authenticité</span><br />
+            du Street-Food.
+          </h2>
+          <div class="space-y-4 font-body text-noir/70">
+            <p>
+              Kebabs à la viande parfaitement grillée, <strong>naans chauds</strong>
+              garnis sur mesure — chaque bouchée raconte une histoire.
+            </p>
+            <p>
+              Viandes <strong>halal certifiées</strong>, préparations maison,
+              sauces généreuses. La qualité Mon Boum, au service d'une nouvelle
+              cuisine.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4" data-reveal data-d="2">
+          <div class="bg-noir text-white p-6 text-center">
+            <p class="font-display text-3xl text-rouge mb-1">Kebab</p>
+            <p class="font-body text-xs uppercase tracking-wider text-white/60">
+              Viande grillée
+            </p>
+          </div>
+          <div class="bg-noir text-white p-6 text-center">
+            <p class="font-display text-3xl text-rouge mb-1">Naans</p>
+            <p class="font-body text-xs uppercase tracking-wider text-white/60">
+              Chauds & garnis
+            </p>
+          </div>
+          <div class="bg-rouge text-white p-6 col-span-2 text-center">
+            <p class="font-display text-2xl uppercase">100% halal</p>
+            <p class="font-body text-xs uppercase tracking-wider text-white/80 mt-1">
+              Certification rigoureuse
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ LOCATION ═══════════════ */}
+  <section id="location" class="bg-gris py-20 md:py-28 scroll-mt-24">
+    <div class="container-wide">
+      <div class="text-center mb-16" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Notre adresse
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none">
+          Retrouvez-nous<br />
+          <span class="text-rouge">à Mermoz</span>.
+        </h2>
+      </div>
+
+      <div class="max-w-xl mx-auto">
+        <div class="bg-white p-10 text-center" data-reveal data-d="2">
+          <h3 class="font-display text-3xl text-noir uppercase mb-6">
+            Boum Saveurs <span class="text-rouge">{loc.nom}</span>
+          </h3>
+          <address class="font-body text-noir/70 not-italic text-lg space-y-1 mb-6">
+            <p>{loc.adresse}</p>
+            <p>{loc.cp} {loc.ville}</p>
+          </address>
+          {loc.tel && (
+            <a
+              href={`tel:${loc.tel.replace(/\s/g, '')}`}
+              class="inline-block text-rouge font-display text-2xl uppercase hover:underline"
+            >
+              📞 {loc.tel}
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ CTA ═══════════════ */}
+  <section class="bg-rouge py-16 md:py-20">
+    <div class="container-wide text-center">
+      <h2 class="font-display text-4xl md:text-5xl text-white uppercase leading-none mb-8" data-reveal>
+        Une envie de <span class="text-noir">kebab</span> ?
+      </h2>
+      <a
+        href="https://monboum.commande.deliveroo.fr/fr/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors"
+        data-reveal
+        data-d="2"
+      >
+        Commander sur Deliveroo
+      </a>
+    </div>
+  </section>
+</Layout>

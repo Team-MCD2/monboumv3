@@ -30,8 +30,8 @@ const {
 } = Astro.props;
 
 const canonicalUrl = Astro.url.href;
-// GA4 measurement ID — placeholder until user provides real ID
-const GA_ID = 'G-XXXXXXXXXX';
+// GA4 measurement ID — read from env; leave empty in .env to disable analytics
+const GA_ID = import.meta.env.PUBLIC_GA4_ID || '';
 
 const faqJsonLd = faq.length > 0 ? {
   '@context': 'https://schema.org',
@@ -56,9 +56,11 @@ const faqJsonLd = faq.length > 0 ? {
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonicalUrl} />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" />
+    <!-- Favicon (company logo only) + PWA manifest -->
+    <link rel="icon" type="image/png" href="/assets/logos/logo-boum-2.png" />
+    <link rel="apple-touch-icon" href="/assets/logos/logo-boum-2.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="Mon Boum" />
 
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
@@ -96,8 +98,8 @@ const faqJsonLd = faq.length > 0 ? {
       <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     )}
 
-    <!-- GA4 (only loads in production, and respects Do-Not-Track) -->
-    {import.meta.env.PROD && GA_ID !== 'G-XXXXXXXXXX' && (
+    <!-- GA4 — only loads when PUBLIC_GA4_ID is set in env + only in prod builds -->
+    {import.meta.env.PROD && GA_ID && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
         <script is:inline define:vars={{ GA_ID }}>

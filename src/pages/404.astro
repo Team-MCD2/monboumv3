@@ -1,0 +1,89 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// 404 — Custom Not Found page
+// Brand-consistent, French, big visual "BOOM"
+// ═══════════════════════════════════════════════════════════════
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Page introuvable (404) — Mon Boum';
+const description = 'La page que vous cherchez n\'existe pas ou a été déplacée. Retrouvez le chemin du Boum.';
+---
+
+<Layout title={title} description={description} noindex={true}>
+  <section
+    class="relative texture-bg overflow-hidden flex items-center"
+    style="min-height: 100vh; padding-top: var(--hh);"
+  >
+    {/* Background shapes */}
+    <img
+      src="/assets/shapes/shape1-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-16 -left-12 w-48 md:w-72 opacity-10 spin-slow"
+    />
+    <img
+      src="/assets/shapes/shape2-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute bottom-16 right-8 w-40 md:w-56 opacity-15 float-anim"
+    />
+    <img
+      src="/assets/shapes/shape3-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-1/3 right-1/4 w-24 md:w-32 opacity-10 float-anim"
+      style="animation-delay: -3s;"
+    />
+
+    <div class="container-wide relative z-10 text-center py-20">
+      <p class="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-6">
+        Erreur 404
+      </p>
+
+      {/* Giant BOOM — visual punch */}
+      <h1
+        class="rise-2 font-display text-white uppercase leading-[0.8] tracking-tight"
+        style="font-size: clamp(6rem, 22vw, 18rem);"
+      >
+        B<span class="text-rouge">O</span>UM<span class="text-rouge">.</span>
+      </h1>
+
+      <p class="rise-3 font-body text-white/80 text-lg md:text-2xl mt-8 max-w-2xl mx-auto">
+        Cette page a fait <span class="text-rouge font-semibold">boum</span>.
+      </p>
+      <p class="rise-3 font-body text-white/60 text-base md:text-lg mt-3 max-w-xl mx-auto">
+        Elle n'existe pas, ou elle a été déplacée. Pas de stress, on vous remet sur le bon chemin.
+      </p>
+
+      <div class="rise-4 mt-10 flex flex-wrap justify-center gap-4">
+        <a
+          href="/"
+          class="inline-block bg-rouge text-white font-display uppercase text-base md:text-lg px-8 md:px-10 py-4 md:py-5 hover:bg-white hover:text-rouge transition-colors"
+        >
+          Retour à l'accueil
+        </a>
+        <a
+          href="/nos-restaurants"
+          class="inline-block border-2 border-white/30 text-white font-display uppercase text-base md:text-lg px-8 md:px-10 py-4 md:py-5 hover:bg-white hover:text-noir transition-colors"
+        >
+          Nos 10 restaurants
+        </a>
+      </div>
+
+      {/* Quick links — helps users recover */}
+      <div class="mt-16 pt-8 border-t border-white/10 max-w-xl mx-auto">
+        <p class="font-body text-xs text-white/50 uppercase tracking-[0.2em] mb-4">
+          Ou explorez
+        </p>
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 font-body text-sm">
+          <a href="/boum-burger" class="text-white/70 hover:text-rouge transition-colors">Boum Burger</a>
+          <a href="/boum-pizzs" class="text-white/70 hover:text-rouge transition-colors">Boum Pizz's</a>
+          <a href="/boum-chicken" class="text-white/70 hover:text-rouge transition-colors">Boum Chicken</a>
+          <a href="/boum-saveurs" class="text-white/70 hover:text-rouge transition-colors">Boum Saveurs</a>
+          <a href="/mon-boum" class="text-white/70 hover:text-rouge transition-colors">Devenir franchisé</a>
+          <a href="/contact" class="text-white/70 hover:text-rouge transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

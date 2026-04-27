@@ -6,9 +6,10 @@
 
 /**
  * @typedef {Object} TikTok
- * @property {string} id - TikTok video numeric ID
+ * @property {string} src - Local mp4 path under /public
  * @property {string} title - French caption / display label
  * @property {string} account - TikTok handle (without @)
+ * @property {string} [url] - Optional public TikTok URL
  */
 
 export const TIKTOK_ACCOUNT = 'boumchickentoulouse';
@@ -16,22 +17,24 @@ export const TIKTOK_ACCOUNT = 'boumchickentoulouse';
 /** @type {TikTok[]} */
 export const TIKTOKS = [
   {
-    id: '7486895339417554198',
-    title: '2 menus pour 10€',
+    src: '/assets/tiktoks/tiktok-1.mp4',
+    title: 'TikTok 1',
     account: TIKTOK_ACCOUNT,
+    url: 'https://www.tiktok.com/@boumchickentoulouse',
   },
   {
-    id: '7499871229025750294',
-    title: 'Boum Saveurs — box gourmande',
+    src: '/assets/tiktoks/tiktok-2.mp4',
+    title: 'TikTok 2',
     account: TIKTOK_ACCOUNT,
+    url: 'https://www.tiktok.com/@boumchickentoulouse',
   },
   {
-    id: '7486151470081903894',
-    title: 'Boum Saveurs — kebab maison',
+    src: '/assets/tiktoks/tiktok-3.mp4',
+    title: 'TikTok 3',
     account: TIKTOK_ACCOUNT,
+    url: 'https://www.tiktok.com/@boumchickentoulouse',
   },
 ];
 
-/** Build the public TikTok URL for an entry (used for oEmbed + accessibility) */
-export const tiktokUrl = (entry) =>
-  `https://www.tiktok.com/@${entry.account}/video/${entry.id}`;
+/** Optional external TikTok URL for attribution / fallback */
+export const tiktokUrl = (entry) => entry.url || `https://www.tiktok.com/@${entry.account}`;

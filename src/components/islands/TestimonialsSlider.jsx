@@ -5,11 +5,32 @@
 // Reduced-motion: disable auto-rotate, pagination only
 // ═══════════════════════════════════════════════════════════════
 import { useState, useEffect, useRef } from 'react';
+import ErrorBoundary from './_ErrorBoundary.jsx';
 import { TESTIMONIALS } from '../../data/testimonials.js';
 
 const ROTATION_MS = 6500;
 
-export default function TestimonialsSlider() {
+// ── Fallback: simple card, first entry only ───────────────────
+function TestimonialsFallback() {
+  const first = TESTIMONIALS[0];
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+      <div className="relative aspect-square max-w-md mx-auto overflow-hidden rounded-lg">
+        <img src={first.photo} alt={first.name} className="w-full h-full object-cover" />
+      </div>
+      <div>
+        <p className="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">Ils nous ont validé</p>
+        <blockquote className="font-display text-3xl md:text-4xl text-white uppercase leading-tight mb-6">
+          <span className="text-rouge">"</span>{first.quote}<span className="text-rouge">"</span>
+        </blockquote>
+        <p className="font-display text-2xl text-white uppercase">{first.name}</p>
+        <p className="font-body text-sm text-white/60">{first.designation}</p>
+      </div>
+    </div>
+  );
+}
+
+function TestimonialsSliderImpl() {
   const [index, setIndex] = useState(0);
   const [reduced, setReduced] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -115,5 +136,14 @@ export default function TestimonialsSlider() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TestimonialsSlider() {
+  const fallback = <TestimonialsFallback />;
+  return (
+    <ErrorBoundary fallback={fallback}>
+      <TestimonialsSliderImpl />
+    </ErrorBoundary>
   );
 }

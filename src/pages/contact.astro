@@ -1,0 +1,179 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// /contact — contact page with ContactForm island
+// ═══════════════════════════════════════════════════════════════
+import Layout from '../layouts/Layout.astro';
+import GrungeSeparator from '../components/GrungeSeparator.astro';
+import ContactForm from '../components/islands/ContactForm.jsx';
+
+const title = 'Contact — Mon Boum Toulouse';
+const description =
+  "Contactez Mon Boum à Toulouse — restaurants, presse, partenariats. Une équipe dédiée vous répond sous 48 heures.";
+---
+
+<Layout title={title} description={description}>
+  {/* ═══════════════ HERO ═══════════════ */}
+  <section
+    class="relative texture-bg overflow-hidden"
+    style="padding-top: var(--hh);"
+  >
+    <img
+      src="/assets/shapes/shape1-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-24 -right-12 w-48 md:w-64 opacity-10 spin-slow"
+      data-parallax="0.15"
+    />
+    <img
+      src="/assets/shapes/shape2-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute bottom-16 left-8 w-32 opacity-20 float-anim"
+      data-parallax="0.2"
+    />
+
+    <div class="container-wide relative z-10 py-16 md:py-24">
+      <p class="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-4">
+        On vous écoute
+      </p>
+      <h1 class="rise-2 font-display text-white uppercase leading-[0.9] text-5xl md:text-7xl lg:text-8xl max-w-3xl">
+        Dites-nous<br />
+        <span class="text-rouge">tout.</span>
+      </h1>
+      <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-8 max-w-2xl">
+        Une question sur un restaurant, une envie de partenariat, une sollicitation
+        presse ? L'équipe Mon Boum vous répond dans les plus brefs délais.
+      </p>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={true} />
+
+  {/* ═══════════════ FORM + CONTACT INFO ═══════════════ */}
+  <section class="bg-white py-16 md:py-24">
+    <div class="container-wide">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16">
+        {/* ── Contact details sidebar ───────────────────── */}
+        <aside class="lg:col-span-1" data-reveal>
+          <h2 class="font-display text-3xl md:text-4xl text-noir uppercase leading-none mb-8">
+            Par <span class="text-rouge">raccourci</span>.
+          </h2>
+
+          <div class="space-y-8">
+            <div>
+              <p class="font-body text-xs uppercase tracking-[0.2em] text-rouge mb-2">
+                Franchise
+              </p>
+              <a
+                href="mailto:franchise@monboum.fr"
+                class="font-display text-xl text-noir hover:text-rouge transition-colors break-all"
+              >
+                franchise@monboum.fr
+              </a>
+              <p class="font-body text-sm text-noir/60 mt-1">
+                Candidatures, développement, partenariats
+              </p>
+            </div>
+
+            <div>
+              <p class="font-body text-xs uppercase tracking-[0.2em] text-rouge mb-2">
+                Siège
+              </p>
+              <address class="font-body text-noir not-italic">
+                BOUM BURGER SARL<br />
+                220 route de Saint-Simon<br />
+                31100 Toulouse
+              </address>
+            </div>
+
+            <div>
+              <p class="font-body text-xs uppercase tracking-[0.2em] text-rouge mb-2">
+                Un restaurant en particulier ?
+              </p>
+              <a
+                href="/nos-restaurants"
+                class="inline-block font-body text-sm text-noir border-b-2 border-rouge pb-1 hover:text-rouge transition-colors"
+              >
+                Voir les 10 adresses →
+              </a>
+            </div>
+
+            <div>
+              <p class="font-body text-xs uppercase tracking-[0.2em] text-rouge mb-2">
+                Suivez-nous
+              </p>
+              <div class="flex gap-3">
+                <a
+                  href="https://www.instagram.com/monboumburger/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-11 h-11 bg-noir text-white flex items-center justify-center hover:bg-rouge transition-colors"
+                  aria-label="Instagram Mon Boum"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.tiktok.com/@boumchickentoulouse"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-11 h-11 bg-noir text-white flex items-center justify-center hover:bg-rouge transition-colors"
+                  aria-label="TikTok Mon Boum"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005.8 20.1a6.34 6.34 0 0010.86-4.43V8.67a8.16 8.16 0 002.93.54V5.76a4.8 4.8 0 01-.01-.07z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://monboum.commande.deliveroo.fr/fr/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-11 h-11 bg-rouge text-white flex items-center justify-center hover:bg-noir transition-colors"
+                  aria-label="Commander sur Deliveroo"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* ── Form ────────────────────────────────────── */}
+        <div class="lg:col-span-2" data-reveal data-d="2">
+          <ContactForm client:visible />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ FRANCHISE CROSS-LINK ═══════════════ */}
+  <section class="bg-gris py-16 md:py-20 border-t border-noir/10">
+    <div class="container-wide text-center">
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-rouge mb-3" data-reveal>
+        Vous êtes entrepreneur ?
+      </p>
+      <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6" data-reveal data-d="2">
+        Rejoignez <span class="text-rouge">Mon Boum</span>.
+      </h2>
+      <p class="font-body text-noir/70 max-w-xl mx-auto mb-8" data-reveal data-d="3">
+        Un concept éprouvé, 10 restaurants ouverts depuis 2004. Découvrez notre
+        programme de franchise.
+      </p>
+      <a
+        href="/formulaire-de-candidature"
+        class="inline-block bg-noir text-white font-display uppercase text-base px-10 py-4 hover:bg-rouge transition-colors"
+        data-reveal
+        data-d="4"
+      >
+        Candidater en franchise
+      </a>
+    </div>
+  </section>
+</Layout>

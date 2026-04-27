@@ -1,0 +1,187 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// /boum-chicken — Enseigne Boum Chicken (1 location, Vauquelin)
+// Distinctive: 7/7 + late-night (fri/sat until 1h45), drive available
+// Hero banner: Boum-Chicken-1-1024x576.png (Pass A asset)
+// ═══════════════════════════════════════════════════════════════
+import Layout from '../layouts/Layout.astro';
+import GrungeSeparator from '../components/GrungeSeparator.astro';
+import { byEnseigne, ENSEIGNES } from '../data/restaurants.js';
+
+const enseigne = ENSEIGNES['boum-chicken'];
+const locations = byEnseigne('boum-chicken');
+const loc = locations[0]; // only 1 — Vauquelin
+
+const title = `${enseigne.nom} Toulouse Vauquelin — Poulet Halal 7j/7 | Mon Boum`;
+const description =
+  'Boum Chicken Vauquelin : poulet halal à Toulouse, ouvert 7j/7 de 11h à 23h. Vendredi et samedi jusqu\'à 1h45. Drive disponible.';
+---
+
+<Layout title={title} description={description}>
+  {/* ═══════════════ HERO ═══════════════ */}
+  <section
+    class="relative texture-bg overflow-hidden"
+    style="padding-top: var(--hh);"
+  >
+    <img
+      src="/assets/shapes/shape2-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-24 -left-12 w-48 md:w-64 opacity-10 spin-slow"
+      data-parallax="0.15"
+    />
+
+    <div class="container-wide relative z-10 py-16 md:py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-4">
+            {enseigne.label}
+          </p>
+          <h1 class="rise-2 font-display text-white uppercase leading-[0.9] text-5xl md:text-7xl lg:text-8xl">
+            BOUM<br />
+            <span class="text-rouge">CHICKEN.</span>
+          </h1>
+          <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-6 max-w-lg">
+            Poulet halal à Toulouse — <strong class="text-white">ouvert 7j/7</strong>,
+            et jusqu'à <strong class="text-white">1h45 le week-end</strong>.
+          </p>
+
+          <div class="rise-4 mt-8 flex flex-wrap gap-4">
+            <a
+              href="https://monboum.commande.deliveroo.fr/fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+            >
+              Commander
+            </a>
+            <a
+              href="#location"
+              class="border border-white/30 text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+            >
+              Voir adresse
+            </a>
+          </div>
+        </div>
+
+        <div class="relative img-zoom">
+          <img
+            src="/assets/banners/Boum-Chicken-1-1024x576.png"
+            alt="Boum Chicken — Poulet halal Toulouse"
+            class="w-full h-auto"
+            loading="eager"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={true} />
+
+  {/* ═══════════════ CONCEPT + HOURS ═══════════════ */}
+  <section class="bg-white py-20 md:py-28">
+    <div class="container-wide">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div data-reveal>
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Notre concept
+          </p>
+          <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6">
+            Le <span class="text-rouge">poulet</span><br />
+            après minuit.
+          </h2>
+          <div class="space-y-4 font-body text-noir/70">
+            <p>
+              <strong>Buckets, wings, burgers au poulet</strong> — tout ce qui fait
+              craquer, en version <strong>halal</strong>.
+            </p>
+            <p>
+              Horaires étendus, <strong>drive</strong> disponible,
+              l'adresse de référence pour un chicken nocturne à Toulouse.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-3" data-reveal data-d="2">
+          <div class="bg-noir text-white p-8">
+            <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-2">
+              Horaires
+            </p>
+            <p class="font-display text-3xl md:text-4xl uppercase mb-1">
+              7<span class="text-rouge">j/7</span>
+            </p>
+            <p class="font-body text-white/70 text-sm">
+              Lundi au jeudi · <strong class="text-white">11h – 23h</strong>
+            </p>
+            <p class="font-body text-white/70 text-sm">
+              Vendredi & samedi · <strong class="text-white">11h – 1h45</strong>
+            </p>
+            <p class="font-body text-white/70 text-sm">
+              Dimanche · <strong class="text-white">11h – 23h</strong>
+            </p>
+          </div>
+          <div class="bg-rouge text-white p-6">
+            <p class="font-display text-2xl uppercase">Drive disponible</p>
+            <p class="font-body text-sm text-white/80 mt-1">
+              Commandez sans descendre de voiture
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ LOCATION ═══════════════ */}
+  <section id="location" class="bg-gris py-20 md:py-28 scroll-mt-24">
+    <div class="container-wide">
+      <div class="text-center mb-16" data-reveal>
+        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+          Notre adresse
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none">
+          Retrouvez-nous<br />
+          <span class="text-rouge">à Vauquelin</span>.
+        </h2>
+      </div>
+
+      <div class="max-w-xl mx-auto">
+        <div class="bg-white p-10 text-center" data-reveal data-d="2">
+          <h3 class="font-display text-3xl text-noir uppercase mb-6">
+            Boum Chicken <span class="text-rouge">{loc.nom}</span>
+          </h3>
+          <address class="font-body text-noir/70 not-italic text-lg space-y-1 mb-6">
+            <p>{loc.adresse}</p>
+            <p>{loc.cp} {loc.ville}</p>
+          </address>
+          {loc.tel && (
+            <a
+              href={`tel:${loc.tel.replace(/\s/g, '')}`}
+              class="inline-block text-rouge font-display text-2xl uppercase hover:underline"
+            >
+              📞 {loc.tel}
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ CTA ═══════════════ */}
+  <section class="bg-rouge py-16 md:py-20">
+    <div class="container-wide text-center">
+      <h2 class="font-display text-4xl md:text-5xl text-white uppercase leading-none mb-8" data-reveal>
+        Chicken <span class="text-noir">now</span>.
+      </h2>
+      <a
+        href="https://monboum.commande.deliveroo.fr/fr/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors"
+        data-reveal
+        data-d="2"
+      >
+        Commander sur Deliveroo
+      </a>
+    </div>
+  </section>
+</Layout>

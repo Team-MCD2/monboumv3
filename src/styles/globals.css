@@ -28,6 +28,13 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Smooth anchor jumps — guarded block (further-guarded by prefers-reduced-motion below) */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   background-color: var(--blanc);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;

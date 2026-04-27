@@ -1,0 +1,151 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// /formulaire-de-candidature — franchise application page
+// ═══════════════════════════════════════════════════════════════
+import Layout from '../layouts/Layout.astro';
+import GrungeSeparator from '../components/GrungeSeparator.astro';
+import FranchiseForm from '../components/islands/FranchiseForm.jsx';
+import { TOTAL_RESTAURANTS } from '../data/restaurants.js';
+
+const title = 'Candidature franchise — Mon Boum Toulouse';
+const description =
+  "Rejoignez Mon Boum, une enseigne toulousaine de street-food halal née en 2004. Candidatez en quelques clics pour ouvrir votre restaurant.";
+
+const STEPS = [
+  { n: 1, t: 'Candidature', d: 'Vous complétez ce formulaire en 3 minutes.' },
+  { n: 2, t: 'Premier échange', d: 'L’équipe franchise vous recontacte sous 7 jours ouvrés.' },
+  { n: 3, t: 'Projet & ouverture', d: 'Étude de zone, accompagnement, formation, puis ouverture.' },
+];
+
+const ATOUTS = [
+  { titre: `${TOTAL_RESTAURANTS} restaurants`, desc: 'Un réseau éprouvé depuis 2004.' },
+  { titre: '4 enseignes', desc: 'Burger, Pizz’s, Chicken, Saveurs — adaptées à votre zone.' },
+  { titre: 'Halal certifié', desc: 'Toute la viande tracée et contrôlée.' },
+  { titre: 'Accompagnement', desc: 'Formation, lancement, marketing, logistique.' },
+];
+---
+
+<Layout title={title} description={description}>
+  {/* ═══════════════ HERO ═══════════════ */}
+  <section
+    class="relative texture-bg overflow-hidden"
+    style="padding-top: var(--hh);"
+  >
+    <img
+      src="/assets/shapes/shape1-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute top-24 -left-12 w-52 md:w-72 opacity-10 spin-slow"
+      data-parallax="0.15"
+    />
+    <img
+      src="/assets/shapes/shape2-min.png"
+      alt=""
+      aria-hidden="true"
+      class="absolute bottom-16 right-8 w-36 opacity-20 float-anim"
+      data-parallax="0.2"
+    />
+
+    <div class="container-wide relative z-10 py-16 md:py-24">
+      <p class="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-4">
+        Rejoignez Mon Boum
+      </p>
+      <h1 class="rise-2 font-display text-white uppercase leading-[0.9] text-5xl md:text-7xl lg:text-8xl max-w-3xl">
+        Ouvrez votre<br />
+        <span class="text-rouge">Boum.</span>
+      </h1>
+      <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-8 max-w-2xl">
+        Une enseigne toulousaine, un concept éprouvé depuis 2004, quatre marques
+        complémentaires. Candidatez en 3 minutes, nous étudions chaque dossier.
+      </p>
+    </div>
+  </section>
+
+  <GrungeSeparator fromDark={true} />
+
+  {/* ═══════════════ 4 ATOUTS ═══════════════ */}
+  <section class="bg-white py-16 md:py-20 border-b border-noir/10">
+    <div class="container-wide">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+        {ATOUTS.map((a, i) => (
+          <div class="text-center" data-reveal data-d={String(i + 1)}>
+            <p class="font-display text-3xl md:text-4xl text-rouge uppercase leading-none mb-2">
+              {a.titre}
+            </p>
+            <p class="font-body text-sm text-noir/70">
+              {a.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ PROCESS 3 STEPS ═══════════════ */}
+  <section class="bg-gris py-16 md:py-20">
+    <div class="container-wide">
+      <div class="text-center mb-12">
+        <p class="font-body text-xs uppercase tracking-[0.3em] text-rouge mb-3" data-reveal>
+          Le parcours
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none" data-reveal data-d="2">
+          3 étapes, <span class="text-rouge">zéro blabla</span>.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+        {STEPS.map((s, i) => (
+          <div
+            class="relative bg-white border-2 border-noir/10 p-8 hover:border-rouge transition-colors"
+            data-reveal
+            data-d={String(i + 1)}
+          >
+            <p class="font-display text-7xl text-rouge/15 absolute top-4 right-6 leading-none">
+              {s.n}
+            </p>
+            <p class="font-body text-xs uppercase tracking-[0.2em] text-rouge mb-3 relative z-10">
+              Étape {s.n}
+            </p>
+            <h3 class="font-display text-2xl text-noir uppercase mb-3 relative z-10">
+              {s.t}
+            </h3>
+            <p class="font-body text-sm text-noir/70 relative z-10">
+              {s.d}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════ FORM ═══════════════ */}
+  <section class="bg-white py-16 md:py-24">
+    <div class="container-wide">
+      <div class="max-w-3xl mx-auto">
+        <div class="mb-10 text-center">
+          <p class="font-body text-xs uppercase tracking-[0.3em] text-rouge mb-3" data-reveal>
+            Votre candidature
+          </p>
+          <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-4" data-reveal data-d="2">
+            Parlons de <span class="text-rouge">votre projet</span>.
+          </h2>
+          <p class="font-body text-noir/70 max-w-xl mx-auto" data-reveal data-d="3">
+            Tous les champs marqués d'un astérisque sont obligatoires. Vos données
+            sont confidentielles.
+          </p>
+        </div>
+
+        <div data-reveal>
+          <FranchiseForm client:visible />
+        </div>
+
+        <p class="font-body text-xs text-noir/50 text-center mt-8 max-w-xl mx-auto">
+          En cas de difficulté avec le formulaire, écrivez-nous directement à{' '}
+          <a href="mailto:franchise@monboum.fr" class="text-rouge hover:underline">
+            franchise@monboum.fr
+          </a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -4,97 +4,100 @@
 // Uses TikTok oEmbed for thumbnail; falls back to generic placeholder
 // if CORS blocks or API returns null.
 // ═══════════════════════════════════════════════════════════════
-import { useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
+import ErrorBoundary from './_ErrorBoundary.jsx';
 import { TIKTOKS, tiktokUrl } from '../../data/tiktoks.js';
 
 function TikTokCard({ entry }) {
-  const [loaded, setLoaded] = useState(false);
-  const [thumb, setThumb] = useState(null);
-  const [error, setError] = useState(false);
+  const videoRef = useRef(null);
+  const [muted, setMuted] = useState(true);
 
-  useEffect(() => {
-    // Fetch oEmbed thumbnail — TikTok allows this cross-origin for oembed JSON
-    const url = `https://www.tiktok.com/oembed?url=${encodeURIComponent(tiktokUrl(entry))}`;
-
-    fetch(url)
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((data) => {
-        if (data && data.thumbnail_url) {
-          setThumb(data.thumbnail_url);
-        } else {
-          setError(true);
-        }
-      })
-      .catch(() => setError(true));
-  }, [entry.id]);
-
-  if (loaded) {
-    return (
-      <div className="aspect-[9/16] w-full overflow-hidden rounded-lg bg-black">
-        <iframe
-          src={`https://www.tiktok.com/embed/v2/${entry.id}`}
-          className="w-full h-full border-0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          title={entry.title}
-          loading="lazy"
-        />
-      </div>
-    );
-  }
+  const toggleSound = () => {
+    const next = !muted;
+    setMuted(next);
+    const el = videoRef.current;
+    if (el) el.muted = next;
+  };
 
   return (
-    <button
-      onClick={() => setLoaded(true)}
-      className="group block relative aspect-[9/16] w-full overflow-hidden rounded-lg bg-noir-deep text-left"
-      aria-label={`Lire la vidéo TikTok : ${entry.title}`}
-    >
-      {/* Thumbnail or fallback texture */}
-      {thumb && !error ? (
-        <img
-          src={thumb}
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          loading="lazy"
-        />
-      ) : (
-        <div
-          className="w-full h-full texture-bg flex items-center justify-center"
-          aria-hidden="true"
-        >
-          <span className="font-display text-4xl text-white/20 uppercase">TikTok</span>
-        </div>
-      )}
+    <div className="group block relative aspect-[9/16] w-full overflow-hidden rounded-lg bg-black text-left">
+      <video
+        ref={videoRef}
+        className="w-full h-full object-cover"
+        src={entry.src}
+        muted={muted}
+        playsInline
+        autoPlay
+        loop
+        preload="metadata"
+      />
 
-      {/* Gradient overlay + play icon */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-16 h-16 bg-rouge/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-          <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
+      <button
+        type="button"
+        onClick={toggleSound}
+        className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/75 text-white flex items-center justify-center transition-colors"
+        aria-label={muted ? 'Activer le son' : 'Couper le son'}
+      >
+        {muted ? (
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+            <path d="M19 12c0 2.5-1.5 4.67-3.5 5.66v-1.73c1.18-.82 2-2.18 2-3.93s-.82-3.11-2-3.93V6.34C17.5 7.33 19 9.5 19 12z" />
+            <path d="M3 10v4h3l4 4V6L6 10H3z" />
           </svg>
-        </div>
-      </div>
+        ) : (
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 10v4h3l4 4V6L6 10H3z" />
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+          </svg>
+        )}
+      </button>
 
-      {/* Caption */}
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <p className="font-body text-xs text-white/70 mb-1">@{entry.account}</p>
-        <p className="font-display text-lg text-white uppercase leading-tight">
-          {entry.title}
-        </p>
+        <p className="font-display text-lg text-white uppercase leading-tight">{entry.title}</p>
       </div>
-    </button>
+    </div>
+  );
+}
+
+// ── Fallback: plain text links to each TikTok ───────────────
+function TikTokFallback() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+      {TIKTOKS.map((entry) => (
+        <a
+          key={entry.src}
+          href={tiktokUrl(entry)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block p-6 border border-noir/20 hover:border-rouge hover:bg-rouge/5 transition-colors"
+        >
+          <p className="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-2">TikTok</p>
+          <p className="font-display text-lg text-noir uppercase">{entry.title}</p>
+          <p className="font-body text-xs text-noir/50 mt-2">@{entry.account}</p>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function TikTokFacadeImpl() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      {TIKTOKS.map((entry) => (
+        <TikTokCard key={entry.src} entry={entry} />
+      ))}
+    </div>
   );
 }
 
 export default function TikTokFacade() {
+  const fallback = <TikTokFallback />;
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      {TIKTOKS.map((entry) => (
-        <TikTokCard key={entry.id} entry={entry} />
-      ))}
-    </div>
+    <ErrorBoundary fallback={fallback}>
+      <TikTokFacadeImpl />
+    </ErrorBoundary>
   );
 }

@@ -4,11 +4,38 @@
 // Reduced-motion: static grid instead of scroll
 // ═══════════════════════════════════════════════════════════════
 import { useEffect, useRef, useState } from 'react';
+import ErrorBoundary from './_ErrorBoundary.jsx';
 import { PROMOS } from '../../data/promos.js';
 
 const SPEED_PX_PER_FRAME = 0.5; // ~30px/s at 60fps
 
-export default function PromoScroller() {
+// ── Fallback: static responsive grid (same as reduced-motion) ───
+function PromosFallback() {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {PROMOS.map((promo) => (
+        <a
+          key={promo.id}
+          href={promo.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block overflow-hidden rounded-lg"
+          aria-label={promo.alt}
+        >
+          <img
+            src={`/assets/promos/${promo.image}`}
+            alt={promo.alt}
+            className="w-full h-32 sm:h-36 md:h-40 object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function PromoScrollerImpl() {
   const trackRef = useRef(null);
   const rafRef = useRef(null);
   const offsetRef = useRef(0);
@@ -59,7 +86,7 @@ export default function PromoScroller() {
             <img
               src={`/assets/promos/${promo.image}`}
               alt={promo.alt}
-              className="w-full h-auto"
+              className="w-full h-32 sm:h-36 md:h-40 object-cover"
               loading="lazy"
               decoding="async"
             />
@@ -90,7 +117,7 @@ export default function PromoScroller() {
             <img
               src={`/assets/promos/${promo.image}`}
               alt={promo.alt}
-              className="w-full h-auto"
+              className="w-full h-36 md:h-44 object-cover"
               loading="lazy"
               decoding="async"
             />
@@ -98,5 +125,14 @@ export default function PromoScroller() {
         ))}
       </div>
     </div>
+  );
+}
+
+export default function PromoScroller() {
+  const fallback = <PromosFallback />;
+  return (
+    <ErrorBoundary fallback={fallback}>
+      <PromoScrollerImpl />
+    </ErrorBoundary>
   );
 }
