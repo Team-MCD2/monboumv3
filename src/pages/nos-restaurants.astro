@@ -6,7 +6,13 @@
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
-import { RESTAURANTS, ENSEIGNES, TOTAL_RESTAURANTS } from '../data/restaurants.js';
+import RestaurantsMap from '../components/islands/RestaurantsMap.jsx';
+import {
+  RESTAURANTS,
+  ENSEIGNES,
+  TOTAL_RESTAURANTS,
+  buildAllRestaurantsGraph,
+} from '../data/restaurants.js';
 
 const title = `Nos ${TOTAL_RESTAURANTS} restaurants à Toulouse — Mon Boum`;
 const description = `Découvrez les ${TOTAL_RESTAURANTS} restaurants Mon Boum à Toulouse et métropole. Adresses, téléphones, drives — retrouvez votre Boum le plus proche.`;
@@ -26,9 +32,21 @@ const mapsUrl = (r) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     `${r.adresse}, ${r.cp} ${r.ville}`
   )}`;
+
+const mapRestaurants = RESTAURANTS.map((r) => {
+  const e = ENSEIGNES[r.enseigne];
+  return {
+    ...r,
+    enseigneName: e.nom,
+    enseigneColor: e.color,
+    mapsUrl: mapsUrl(r),
+  };
+});
+
+const schema = buildAllRestaurantsGraph(Astro.site?.toString() || 'https://mon-boum.vercel.app');
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} schema={schema}>
   {/* ═══════════════ HERO ═══════════════ */}
   <section
     class="relative texture-bg overflow-hidden"
@@ -68,6 +86,10 @@ const mapsUrl = (r) =>
   {/* ═══════════════ FILTER + GRID ═══════════════ */}
   <section class="bg-white py-16 md:py-24">
     <div class="container-wide">
+      <div class="mb-12" data-reveal>
+        <RestaurantsMap restaurants={mapRestaurants} client:visible />
+      </div>
+
       {/* Filter pills */}
       <div
         class="flex flex-wrap justify-center gap-2 md:gap-3 mb-12"
@@ -103,6 +125,8 @@ const mapsUrl = (r) =>
             <article
               class="restaurant-card bg-white border-2 border-noir/10 hover:border-rouge hover:shadow-xl transition-all relative overflow-hidden group"
               data-enseigne={r.enseigne}
+              data-id={r.id}
+              id={r.id}
               data-reveal
               data-d={String(Math.min((i % 4) + 1, 4))}
             >
@@ -167,6 +191,16 @@ const mapsUrl = (r) =>
                   >
                     Itinéraire
                   </a>
+                  {r.deliverooUrl && (
+                    <a
+                      href={r.deliverooUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-body text-xs bg-rouge text-white px-3 py-2 uppercase tracking-wider hover:bg-noir transition-colors"
+                    >
+                      Commander
+                    </a>
+                  )}
                   <a
                     href={enseigne.path}
                     class="font-body text-xs border border-noir/20 text-noir px-3 py-2 uppercase tracking-wider hover:bg-noir hover:text-white transition-colors"
@@ -217,10 +251,30 @@ const mapsUrl = (r) =>
     const cards = document.querySelectorAll<HTMLElement>('.restaurant-card');
     const emptyState = document.getElementById('empty-state');
 
+    const focusCard = (id: string) => {
+      const card = document.getElementById(id);
+      if (!card) return;
+
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('ring-2', 'ring-rouge');
+      window.setTimeout(() => {
+        card.classList.remove('ring-2', 'ring-rouge');
+      }, 1400);
+    };
+
+    window.addEventListener('mb:restaurant-focus', (e: Event) => {
+      const id = (e as CustomEvent)?.detail?.id;
+      if (typeof id === 'string') focusCard(id);
+    });
+
     pills.forEach((pill) => {
       pill.addEventListener('click', () => {
         const filter = pill.dataset.filter;
         if (!filter) return;
+
+        window.dispatchEvent(
+          new CustomEvent('mb:restaurants-filter', { detail: { filter } })
+        );
 
         // Update pill states
         pills.forEach((p) => {

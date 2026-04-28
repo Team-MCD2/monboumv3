@@ -16,6 +16,7 @@
  * @property {boolean} [drive] - Whether drive-through is available
  * @property {string} [horaires] - Opening hours if specified
  * @property {string} [note] - Disambiguation note (e.g., limited menu)
+ * @property {string} [deliverooUrl] - Deliveroo order page for this location
  * @property {[number, number]} coords - [latitude, longitude]
  */
 
@@ -31,6 +32,7 @@ export const RESTAURANTS = [
     ville: 'Toulouse',
     tel: '05 61 40 77 73',
     drive: true,
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/mirail-universite/boum-burger',
     coords: [43.5607, 1.4012],
   },
   {
@@ -42,6 +44,7 @@ export const RESTAURANTS = [
     ville: 'Toulouse',
     tel: '05 61 41 74 17',
     drive: true,
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/lacourtensourt-centre/boum-burger-aucamville',
     coords: [43.6602, 1.4339],
   },
   {
@@ -53,6 +56,7 @@ export const RESTAURANTS = [
     ville: 'Colomiers',
     tel: '05 34 64 04 04',
     drive: true,
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/colomiers-centre/boum-burger-colomiers',
     coords: [43.6115, 1.3364],
   },
   {
@@ -64,6 +68,7 @@ export const RESTAURANTS = [
     ville: 'Toulouse',
     tel: '05 61 51 25 12',
     drive: false,
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/patte-doie-la-cepiere/new-york-story',
     coords: [43.5772, 1.4095],
   },
 
@@ -77,6 +82,7 @@ export const RESTAURANTS = [
     ville: 'Toulouse',
     tel: '05 61 41 81 18',
     note: "La Soso et la Tunisienne ne sont pas disponibles ici.",
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/reynerie/boum-pizz',
     coords: [43.5607, 1.4012],
   },
   {
@@ -88,6 +94,7 @@ export const RESTAURANTS = [
     ville: 'Toulouse',
     tel: '05 61 41 61 61',
     note: 'Pizzas & Tacos disponibles.',
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/mirail-universite/boum-pizz-bellefont',
     coords: [43.5630, 1.3970],
   },
   {
@@ -98,6 +105,7 @@ export const RESTAURANTS = [
     cp: '31200',
     ville: 'Toulouse',
     tel: '05 61 41 74 17',
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/lacourtensourt-centre/boum-pizzs-aucamville',
     coords: [43.6602, 1.4339],
   },
   {
@@ -108,6 +116,7 @@ export const RESTAURANTS = [
     cp: '31400',
     ville: 'Toulouse',
     note: 'Pizzas & Tacos — Krousty',
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/rangueil/boum-pizzs',
     coords: [43.5539, 1.4704],
   },
 
@@ -122,6 +131,7 @@ export const RESTAURANTS = [
     tel: '05 34 46 18 38',
     drive: true,
     horaires: "7j/7 · 11h–23h · ven/sam jusqu'à 1h45",
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/mirail-universite/boum-fried-chicken',
     coords: [43.5898, 1.4421],
   },
 
@@ -133,6 +143,7 @@ export const RESTAURANTS = [
     adresse: '191 rue Henri Desbals',
     cp: '31100',
     ville: 'Toulouse',
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/patte-doie-la-cepiere/boum-saveurs',
     coords: [43.5768, 1.4098],
   },
 ];

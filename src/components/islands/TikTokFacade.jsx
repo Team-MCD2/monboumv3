@@ -4,13 +4,22 @@
 // Uses TikTok oEmbed for thumbnail; falls back to generic placeholder
 // if CORS blocks or API returns null.
 // ═══════════════════════════════════════════════════════════════
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './_ErrorBoundary.jsx';
 import { TIKTOKS, tiktokUrl } from '../../data/tiktoks.js';
 
 function TikTokCard({ entry }) {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReduced(mq.matches);
+    const onChange = (e) => setReduced(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   const toggleSound = () => {
     const next = !muted;
@@ -27,7 +36,7 @@ function TikTokCard({ entry }) {
         src={entry.src}
         muted={muted}
         playsInline
-        autoPlay
+        autoPlay={!reduced}
         loop
         preload="metadata"
       />
@@ -39,6 +48,7 @@ function TikTokCard({ entry }) {
         onClick={toggleSound}
         className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/75 text-white flex items-center justify-center transition-colors"
         aria-label={muted ? 'Activer le son' : 'Couper le son'}
+        aria-pressed={muted ? 'false' : 'true'}
       >
         {muted ? (
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

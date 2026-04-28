@@ -6,18 +6,24 @@
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
-import { byEnseigne, ENSEIGNES } from '../data/restaurants.js';
+import {
+  byEnseigne,
+  ENSEIGNES,
+  buildEnseigneGraph,
+} from '../data/restaurants.js';
 
 const enseigne = ENSEIGNES['boum-saveurs'];
 const locations = byEnseigne('boum-saveurs');
 const loc = locations[0]; // only 1 — Mermoz
+
+const schema = buildEnseigneGraph('boum-saveurs', Astro.site?.toString() || 'https://mon-boum.vercel.app');
 
 const title = `${enseigne.nom} Toulouse Mermoz — Kebab & Naans Halal | Mon Boum`;
 const description =
   "Boum Saveurs Mermoz : kebabs et naans halal à Toulouse. L'authenticité du Street-Food oriental, signée Mon Boum.";
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} schema={schema}>
   {/* ═══════════════ HERO ═══════════════ */}
   <section
     class="relative texture-bg overflow-hidden"
@@ -55,7 +61,7 @@ const description =
 
           <div class="rise-4 mt-8 flex flex-wrap gap-4">
             <a
-              href="https://monboum.commande.deliveroo.fr/fr/"
+              href={loc?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
               target="_blank"
               rel="noopener noreferrer"
               class="bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
@@ -164,6 +170,28 @@ const description =
               📞 {loc.tel}
             </a>
           )}
+          <div class="flex flex-wrap justify-center gap-2 mt-8 pt-6 border-t border-noir/10">
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                `${loc.adresse}, ${loc.cp} ${loc.ville}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-body text-xs bg-noir text-white px-3 py-2 uppercase tracking-wider hover:bg-rouge transition-colors"
+            >
+              Itinéraire
+            </a>
+            {loc.deliverooUrl && (
+              <a
+                href={loc.deliverooUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-body text-xs bg-rouge text-white px-3 py-2 uppercase tracking-wider hover:bg-noir transition-colors"
+              >
+                Commander
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -176,7 +204,7 @@ const description =
         Une envie de <span class="text-noir">kebab</span> ?
       </h2>
       <a
-        href="https://monboum.commande.deliveroo.fr/fr/"
+        href={loc?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
         target="_blank"
         rel="noopener noreferrer"
         class="inline-block bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors"

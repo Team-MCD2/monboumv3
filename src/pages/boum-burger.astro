@@ -5,17 +5,23 @@
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
-import { byEnseigne, ENSEIGNES } from '../data/restaurants.js';
+import {
+  byEnseigne,
+  ENSEIGNES,
+  buildEnseigneGraph,
+} from '../data/restaurants.js';
 
 const enseigne = ENSEIGNES['boum-burger'];
 const locations = byEnseigne('boum-burger');
+
+const schema = buildEnseigneGraph('boum-burger', Astro.site?.toString() || 'https://mon-boum.vercel.app');
 
 const title = `${enseigne.nom} Toulouse — Burger Halal Depuis 2004 | Mon Boum`;
 const description =
   'Boum Burger : le 1er drive Fast-Food halal de France depuis 2004. Découvrez nos burgers halal dans nos 4 restaurants à Toulouse.';
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} schema={schema}>
   {/* ═══════════════ HERO ═══════════════ */}
   <section
     class="relative texture-bg overflow-hidden"
@@ -53,7 +59,7 @@ const description =
 
           <div class="rise-4 mt-8 flex flex-wrap gap-4">
             <a
-              href="https://monboum.commande.deliveroo.fr/fr/"
+              href={locations[0]?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
               target="_blank"
               rel="noopener noreferrer"
               class="bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
@@ -174,6 +180,28 @@ const description =
                 </p>
               )}
             </address>
+            <div class="flex flex-wrap gap-2 mt-6 pt-4 border-t border-noir/10">
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  `${loc.adresse}, ${loc.cp} ${loc.ville}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-body text-xs bg-noir text-white px-3 py-2 uppercase tracking-wider hover:bg-rouge transition-colors"
+              >
+                Itinéraire
+              </a>
+              {loc.deliverooUrl && (
+                <a
+                  href={loc.deliverooUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-body text-xs bg-rouge text-white px-3 py-2 uppercase tracking-wider hover:bg-noir transition-colors"
+                >
+                  Commander
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -187,7 +215,7 @@ const description =
         Envie d'un <span class="text-noir">boum burger</span> ?
       </h2>
       <a
-        href="https://monboum.commande.deliveroo.fr/fr/"
+        href={locations[0]?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
         target="_blank"
         rel="noopener noreferrer"
         class="inline-block bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors"

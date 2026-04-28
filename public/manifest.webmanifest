@@ -10,7 +10,7 @@
   "icons": [
     {
       "src": "/assets/logos/logo-boum-2.png",
-      "sizes": "any",
+      "sizes": "120x140",
       "type": "image/png",
       "purpose": "any"
     }

@@ -18,21 +18,21 @@ export const TIKTOK_ACCOUNT = 'boumchickentoulouse';
 export const TIKTOKS = [
   {
     src: '/assets/tiktoks/tiktok-1.mp4',
-    title: 'TikTok 1',
+    title: 'Les naans kebab à tester absolument à Toulouse !',
     account: TIKTOK_ACCOUNT,
-    url: 'https://www.tiktok.com/@boumchickentoulouse',
+    url: 'https://www.tiktok.com/@boumchickentoulouse/video/7498011452289092886',
   },
   {
     src: '/assets/tiktoks/tiktok-2.mp4',
-    title: 'TikTok 2',
+    title: 'La pizza géante qui régale Toulouse !',
     account: TIKTOK_ACCOUNT,
-    url: 'https://www.tiktok.com/@boumchickentoulouse',
+    url: 'https://www.tiktok.com/@boumchickentoulouse/video/7493925705890270486',
   },
   {
     src: '/assets/tiktoks/tiktok-3.mp4',
-    title: 'TikTok 3',
+    title: 'BOUM SAVEURS — La box du peuple à moins de 10€',
     account: TIKTOK_ACCOUNT,
-    url: 'https://www.tiktok.com/@boumchickentoulouse',
+    url: 'https://www.tiktok.com/@boumchickentoulouse/video/7489473159838698774',
   },
 ];
 
