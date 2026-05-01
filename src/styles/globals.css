@@ -1,3 +1,13 @@
+/* ── Self-hosted fonts (Phase 2.1) ───────────────────────────────
+   Replaces previous external Google Fonts links (which caused
+   ERR_NAME_NOT_RESOLVED in offline / restricted environments).
+   Bundled locally via @fontsource — no runtime CDN dependency. */
+@import '@fontsource/anton/400.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

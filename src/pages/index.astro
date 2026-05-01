@@ -16,9 +16,27 @@ const title =
   'Mon Boum Toulouse — Fast-Food Halal Depuis 2004 | Burger, Pizza, Chicken';
 const description =
   'Le meilleur du Street-Food halal à Toulouse depuis 2004. Découvrez nos burgers, pizzas, chickens et kebabs dans 10 restaurants sur la métropole toulousaine.';
+
+const siteUrl = Astro.site?.href?.replace(/\/$/, '') ?? 'https://mon-boum.vercel.app';
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Mon Boum',
+  alternateName: ['Boum Burger', "Boum Pizz's", 'Boum Chicken', 'Boum Saveurs'],
+  url: siteUrl,
+  logo: `${siteUrl}/assets/logos/Boums.png`,
+  description,
+  foundingDate: '2004',
+  areaServed: { '@type': 'City', name: 'Toulouse' },
+  sameAs: [
+    'https://www.instagram.com/boumburger/',
+    'https://www.tiktok.com/@boumchickentoulouse',
+    'https://www.facebook.com/boumburger',
+  ],
+};
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} schema={organizationSchema}>
   {/* ═══════════════ 1. HERO ═══════════════ */}
   <section
     class="relative texture-bg overflow-hidden"
@@ -88,7 +106,10 @@ const description =
             src="/assets/banners/welcome_image.png"
             alt="Mon Boum depuis 2004"
             class="w-full h-auto max-w-md mx-auto"
+            width="523"
+            height="502"
             loading="lazy"
+            decoding="async"
           />
           <img
             src="/assets/shapes/shape3-min.png"
@@ -133,7 +154,10 @@ const description =
                   src={imgMap[enseigne.slug]}
                   alt={enseigne.nom}
                   class="w-full h-full object-contain"
+                  width="300"
+                  height="300"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <h3 class="font-display text-xl md:text-2xl text-noir uppercase group-hover:text-rouge transition-colors">
@@ -156,7 +180,10 @@ const description =
             src="/assets/banners/BOUM-BURGER-SINCE.png"
             alt="Qualité Mon Boum depuis 2004"
             class="w-full h-auto max-w-lg mx-auto"
+            width="1366"
+            height="768"
             loading="lazy"
+            decoding="async"
           />
         </div>
 
@@ -228,7 +255,10 @@ const description =
             src="/assets/banners/Commandez.png"
             alt="Livraison Deliveroo — Mon Boum"
             class="w-full h-auto max-w-md mx-auto float-anim"
+            width="4112"
+            height="3438"
             loading="lazy"
+            decoding="async"
           />
         </div>
       </div>

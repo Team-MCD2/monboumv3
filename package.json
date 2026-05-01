@@ -10,13 +10,19 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "sync:tiktok": "node scripts/tiktok-download.mjs"
+    "sync:tiktok": "node scripts/tiktok-download.mjs",
+    "validate:data": "node scripts/validate-data.mjs",
+    "validate:seo": "node scripts/validate-seo.mjs",
+    "validate:all": "npm run validate:data && npm run build && npm run validate:seo",
+    "generate:icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
     "@astrojs/sitemap": "^3.7.0",
     "@astrojs/tailwind": "^6.0.2",
     "@emailjs/browser": "^4.4.1",
+    "@fontsource/anton": "^5.2.7",
+    "@fontsource/inter": "^5.2.8",
     "astro": "^5.18.1",
     "leaflet": "^1.9.4",
     "react": "18.2.0",
@@ -26,7 +32,8 @@
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1"
+    "@types/react-dom": "^18.3.1",
+    "sharp": "^0.34.5"
   },
   "engines": {
     "node": ">=18.17.1"
