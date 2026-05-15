@@ -12,12 +12,11 @@ import ErrorBoundary from './_ErrorBoundary.jsx';
 // Commandez.png is a 1263×2578 portrait phone mockup — left at its natural
 // scale it dominates the layout. We size it down + tilt it slightly so it
 // reads as a decorative side element, not a billboard.
-const SLIDES = [
+const SLIDES_BASE = [
   {
     eyebrow: 'Mon Boum · Toulouse · Halal',
     line1: 'LE MEILLEUR DU STREET-FOOD',
     line2: 'HALAL.',
-    image: '/assets/banners/slider_image2.png',
     imageAlt: 'Pile de burgers Mon Boum',
     wrapperClass: 'max-w-md lg:max-w-lg',
   },
@@ -25,7 +24,6 @@ const SLIDES = [
     eyebrow: 'Livré 7j/7 · Toulouse + agglo',
     line1: 'LIVRAISON EN 30 MIN',
     line2: 'À TOULOUSE.',
-    image: '/assets/banners/Commandez.png',
     imageAlt: 'Livraison Mon Boum — scooter',
     wrapperClass:
       'max-w-[240px] md:max-w-[280px] lg:max-w-[320px] rotate-[4deg]',
@@ -34,7 +32,6 @@ const SLIDES = [
     eyebrow: 'Depuis 2004 · 10 restaurants',
     line1: '1er DRIVE HALAL',
     line2: 'DE FRANCE.',
-    image: '/assets/products/boum-drive-lifestyle.jpg',
     imageAlt: 'Drive Mon Boum — 1er drive halal de France depuis 2004',
     wrapperClass: 'max-w-md lg:max-w-xl',
   },
@@ -69,10 +66,15 @@ function HeroFallback() {
   );
 }
 
-function HeroRotatorImpl() {
+function HeroRotatorImpl({ images }) {
   const [index, setIndex] = useState(0);
   const [reduced, setReduced] = useState(false);
   const timerRef = useRef(null);
+
+  const SLIDES = SLIDES_BASE.map((slide, i) => ({
+    ...slide,
+    image: images?.[i] || '',
+  }));
 
   // Detect reduced-motion preference on mount and listen for changes
   useEffect(() => {
@@ -93,7 +95,7 @@ function HeroRotatorImpl() {
     }, ROTATION_MS);
 
     return () => clearInterval(timerRef.current);
-  }, [reduced]);
+  }, [reduced, SLIDES.length]);
 
   const current = reduced ? SLIDES[0] : SLIDES[index];
   const transitionStyle = reduced
@@ -182,11 +184,11 @@ function HeroRotatorImpl() {
   );
 }
 
-export default function HeroRotator() {
+export default function HeroRotator({ images }) {
   const fallback = <HeroFallback />;
   return (
     <ErrorBoundary fallback={fallback}>
-      <HeroRotatorImpl />
+      <HeroRotatorImpl images={images} />
     </ErrorBoundary>
   );
 }

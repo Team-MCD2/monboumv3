@@ -11,7 +11,17 @@ import HeroRotator from '../components/islands/HeroRotator.jsx';
 import TestimonialsSlider from '../components/islands/TestimonialsSlider.jsx';
 import PromoScroller from '../components/islands/PromoScroller.jsx';
 import TikTokFacade from '../components/islands/TikTokFacade.jsx';
-import { ENSEIGNES, byEnseigne } from '../data/restaurants.js';
+import { ENSEIGNES, byEnseigne, RESTAURANTS, buildRestaurantSchema } from '../data/restaurants.js';
+import { Image, getImage } from 'astro:assets';
+
+import sliderImage2 from '../assets/banners/slider_image2.png';
+import commandezImage from '../assets/banners/Commandez.png';
+import driveLifestyleImage from '../assets/products/boum-drive-lifestyle.jpg';
+
+const optSliderImage2 = await getImage({ src: sliderImage2, format: 'webp' });
+const optCommandezImage = await getImage({ src: commandezImage, format: 'webp' });
+const optDriveLifestyleImage = await getImage({ src: driveLifestyleImage, format: 'webp' });
+const heroImages = [optSliderImage2.src, optCommandezImage.src, optDriveLifestyleImage.src];
 
 const title =
   'Mon Boum Toulouse — Fast-Food Halal Depuis 2004 | Burger, Pizza, Chicken';
@@ -35,6 +45,9 @@ const organizationSchema = {
     'https://www.facebook.com/boumburger',
   ],
 };
+
+const allRestaurantsSchema = RESTAURANTS.map(r => buildRestaurantSchema(r, siteUrl));
+const combinedSchema = [organizationSchema, ...allRestaurantsSchema];
 
 const enseigneImg: Record<string, string> = {
   'boum-burger': '/assets/banners/Boum-Burgers.png',
@@ -80,7 +93,7 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
 });
 ---
 
-<Layout title={title} description={description} schema={organizationSchema}>
+<Layout title={title} description={description} schema={combinedSchema}>
   {/* ═══════════════ 1. HERO ═══════════════ */}
   {/* min-height uses dvh on supporting browsers (iOS Safari URL-bar safe) */}
   <section
@@ -107,7 +120,7 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
     {/* Arbitrary dvh value: Tailwind 3.4 supports dvh in [...]; older     */}
     {/* browsers fall back to the same calc with vh via natural cascade.   */}
     <div class="container-wide relative z-10 min-h-[calc(100dvh-110px)] flex items-center py-12 lg:py-16">
-      <HeroRotator client:load />
+      <HeroRotator client:load images={heroImages} />
     </div>
 
     {/* Red bottom banner — emotional/punchline angle.                   */}
@@ -456,12 +469,12 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
         </div>
 
         <div class="relative" data-reveal data-d="2">
-          <img
-            src="/assets/banners/Commandez.png"
+          <Image
+            src={commandezImage}
             alt="Livraison Deliveroo — Mon Boum"
             class="w-full h-auto max-w-md mx-auto float-anim"
-            width="1263"
-            height="2578"
+            width={1263}
+            height={2578}
             loading="lazy"
             decoding="async"
           />
