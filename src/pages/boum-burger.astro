@@ -63,15 +63,17 @@ const description =
               href={locations[0]?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
               target="_blank"
               rel="noopener noreferrer"
-              class="bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+              class="inline-flex items-center gap-3 bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors arrow-cta pulse-rouge"
             >
               Commander
+              <span data-arrow aria-hidden="true">→</span>
             </a>
             <a
               href="#locations"
-              class="border border-white/30 text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+              class="inline-flex items-center gap-3 border border-white/30 text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors arrow-cta"
             >
               Nos adresses
+              <span data-arrow aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -229,11 +231,12 @@ const description =
         href={locations[0]?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-block bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors"
+        class="inline-flex items-center gap-3 bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors arrow-cta"
         data-reveal
         data-d="2"
       >
         Commander sur Deliveroo
+        <span data-arrow aria-hidden="true">→</span>
       </a>
     </div>
   </section>

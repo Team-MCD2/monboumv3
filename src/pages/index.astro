@@ -473,13 +473,20 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
   {/* ═══════════════ 6. PROMOS (scroller) ═══════════════ */}
   <section class="bg-gris py-20 md:py-28">
     <div class="container-wide mb-12">
-      <div data-reveal>
-        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-          Offres du moment
-        </p>
-        <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none">
-          Nos <span class="text-rouge">promos.</span>
-        </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end" data-reveal>
+        <div>
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Offres du moment
+          </p>
+          <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-4 lg:mb-0">
+            Nos <span class="text-rouge">promos.</span>
+          </h2>
+        </div>
+        <div class="lg:text-right">
+          <p class="font-body text-base md:text-lg text-noir/70 leading-relaxed max-w-md ml-auto mb-6 lg:mb-0">
+            Les meilleurs deals pour les grosses faims. De la pizza géante offerte au burger offert, on régale la Boum Team. Uniquement sur Deliveroo.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -500,13 +507,16 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
       data-parallax="0.1"
     />
     <div class="container-wide relative z-10">
-      <div class="text-center mb-16" data-reveal>
+      <div class="text-center mb-16 max-w-2xl mx-auto" data-reveal>
         <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
           Ils nous ont
         </p>
-        <h2 class="font-display text-5xl md:text-6xl text-white uppercase leading-none">
+        <h2 class="font-display text-5xl md:text-6xl text-white uppercase leading-none mb-6">
           Validé.
         </h2>
+        <p class="font-body text-base md:text-lg text-white/70 leading-relaxed">
+          La Boum Team parle pour nous. Des milliers d'avis qui confirment une seule chose : la meilleure street-food halal de Toulouse, c'est ici.
+        </p>
       </div>
 
       <div data-reveal data-d="2">
@@ -520,24 +530,29 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
   {/* ═══════════════ 8. TIKTOKS ═══════════════ */}
   <section class="bg-white py-20 md:py-28">
     <div class="container-wide">
-      <div class="text-center mb-16" data-reveal>
-        <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-          Suivez-nous
-        </p>
-        <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-4">
-          Réseaux <span class="text-rouge">sociaux.</span>
-        </h2>
-        <p class="font-body text-noir/60">
-          Les dernières vidéos de{' '}
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end mb-16" data-reveal>
+        <div>
+          <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+            Suivez-nous
+          </p>
+          <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-4">
+            Réseaux <span class="text-rouge">sociaux.</span>
+          </h2>
+          <p class="font-body text-base md:text-lg text-noir/70 leading-relaxed max-w-md">
+            Rejoignez la Boum Team sur TikTok. Du food-porn, des backstages, des exclus et de la bonne humeur toulousaine.
+          </p>
+        </div>
+        <div class="lg:text-right">
           <a
             href="https://www.tiktok.com/@boumchickentoulouse"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-rouge hover:underline"
+            class="inline-flex items-center gap-3 border border-noir/20 text-noir font-display uppercase text-sm px-7 py-4 hover:bg-noir hover:text-white transition-colors arrow-cta"
           >
-            @boumchickentoulouse
+            Suivre @boumchickentoulouse
+            <span data-arrow aria-hidden="true">→</span>
           </a>
-        </p>
+        </div>
       </div>
 
       <div data-reveal data-d="2">

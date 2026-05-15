@@ -234,11 +234,12 @@ const schema = buildAllRestaurantsGraph(Astro.site?.toString() || 'https://mon-b
         href="https://monboum.commande.deliveroo.fr/fr/"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-block bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors"
+        class="inline-flex items-center gap-3 bg-white text-rouge font-display uppercase text-lg px-12 py-5 hover:bg-noir hover:text-white transition-colors arrow-cta"
         data-reveal
         data-d="2"
       >
         Commander en ligne
+        <span data-arrow aria-hidden="true">→</span>
       </a>
     </div>
   </section>
