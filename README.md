@@ -120,10 +120,14 @@ Build output is static HTML (`output: 'static'` in `astro.config.mjs`), served f
 
 ## Brand rules
 
-Documented in `plan/plan.md`. The two hard rules worth flagging for contributors:
+Documented in `plan/plan.md` (frozen brief) and codified in `.project-store/decisions.md` (ADR-001..009). The hard rules worth flagging for contributors:
 
 1. **Header height is dynamic** — use `padding-top: var(--hh)` on hero sections, never a hardcoded value. The value is set by Layout JS to match the Header's measured height.
 2. **Logo never sits on a coloured container.** The dedicated footer variant (`footer_logo-boum.png`) is the only one allowed on dark backgrounds.
+3. **Mobile drawer requires an explicit internal close X** — header burger→X transform alone is too subtle on mobile. See `.project-store/decisions.md` ADR-003.
+4. **Scraped PNGs that land on dark surfaces get pre-processed by `npm run derosify:bg`** — bake alpha-transparency in once instead of fighting it with CSS. See ADR-004.
+
+> Reference-site contextualisation (newschooltacos, bnwburger, g-ladalle, pointb-officiel) lives in **ADR-008** — a deliberate pick list of "what we steal vs what we skip". Consult it before introducing a net-new visual pattern.
 
 ---
 

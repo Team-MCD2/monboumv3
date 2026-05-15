@@ -6,6 +6,7 @@
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
+import CarteSection from '../components/CarteSection.astro';
 import {
   byEnseigne,
   ENSEIGNES,
@@ -75,8 +76,8 @@ const description =
             src="/assets/banners/Boum-Chicken-1-1024x576.png"
             alt="Boum Chicken — Poulet halal Toulouse"
             class="w-full h-auto"
-            width="1024"
-            height="576"
+            width="499"
+            height="298"
             loading="eager"
             fetchpriority="high"
             decoding="async"
@@ -140,6 +141,12 @@ const description =
       </div>
     </div>
   </section>
+
+  {/* ═══════════════ CARTE (Phase C — boss feedback 2026-05-04) ═══════════════ */}
+  <CarteSection
+    slug="boum-chicken"
+    deliverooUrl={loc?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
+  />
 
   {/* ═══════════════ LOCATION ═══════════════ */}
   <section id="location" class="bg-gris py-20 md:py-28 scroll-mt-24">

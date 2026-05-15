@@ -14,7 +14,9 @@
     "validate:data": "node scripts/validate-data.mjs",
     "validate:seo": "node scripts/validate-seo.mjs",
     "validate:all": "npm run validate:data && npm run build && npm run validate:seo",
-    "generate:icons": "node scripts/generate-icons.mjs"
+    "generate:icons": "node scripts/generate-icons.mjs",
+    "derosify:bg": "node scripts/derosify-bg.mjs",
+    "trim:logos": "node scripts/derosify-bg.mjs --trim public/assets/banners/welcome_image.png public/assets/banners/BOUM-BURGER-SINCE.png public/assets/banners/Boum-Pizzs-1.png public/assets/banners/Boum-Chicken-1-1024x576.png public/assets/banners/Commandez.png"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",

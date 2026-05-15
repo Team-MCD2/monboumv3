@@ -6,6 +6,7 @@
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
+import CarteSection from '../components/CarteSection.astro';
 import {
   byEnseigne,
   ENSEIGNES,
@@ -143,6 +144,12 @@ const description =
       </div>
     </div>
   </section>
+
+  {/* ═══════════════ CARTE (Phase C — placeholder, carte non scrapée) ═══════════════ */}
+  <CarteSection
+    slug="boum-saveurs"
+    deliverooUrl={loc?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
+  />
 
   {/* ═══════════════ LOCATION ═══════════════ */}
   <section id="location" class="bg-gris py-20 md:py-28 scroll-mt-24">

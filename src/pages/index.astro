@@ -6,11 +6,12 @@
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
+import ProductShowcase from '../components/ProductShowcase.astro';
 import HeroRotator from '../components/islands/HeroRotator.jsx';
 import TestimonialsSlider from '../components/islands/TestimonialsSlider.jsx';
 import PromoScroller from '../components/islands/PromoScroller.jsx';
 import TikTokFacade from '../components/islands/TikTokFacade.jsx';
-import { ENSEIGNES } from '../data/restaurants.js';
+import { ENSEIGNES, byEnseigne } from '../data/restaurants.js';
 
 const title =
   'Mon Boum Toulouse — Fast-Food Halal Depuis 2004 | Burger, Pizza, Chicken';
@@ -34,13 +35,57 @@ const organizationSchema = {
     'https://www.facebook.com/boumburger',
   ],
 };
+
+const enseigneImg: Record<string, string> = {
+  'boum-burger': '/assets/banners/Boum-Burgers.png',
+  'boum-pizzs': '/assets/banners/BOUM-Pizzs.png',
+  'boum-chicken': '/assets/banners/Boum-Chicken.png',
+  'boum-saveurs': '/assets/banners/Boum-Saveurs.png',
+};
+
+// Top-3 signature dishes per enseigne — sourced from src/data/menus.js
+// (items[]) + TikTok top-views (Naan Kebab #1, Pizza Géante #2, Box du peuple #3)
+// + Rangueil "Krousty" note in restaurants.js. No fabricated names.
+const SIGNATURES: Record<string, string[]> = {
+  'boum-burger': ['Wall Street', 'Brooklyn', '5e Avenue'],
+  'boum-pizzs': ['Pizza Géante', 'Tacos', 'Krousty'],
+  'boum-chicken': ['Bucket', 'Bowl', 'Chicken Burger'],
+  'boum-saveurs': ['Naan Kebab', 'Box du peuple', 'Assiettes'],
+};
+
+// Derive enseigne meta (count, drives) from restaurants.js — single source of truth.
+const enseigneCards = Object.values(ENSEIGNES).map((e) => {
+  const restos = byEnseigne(e.slug);
+  const count = restos.length;
+  const drives = restos.filter((r) => r.drive).length;
+
+  // Build a compact meta line. Boum Chicken gets the "7j/7" angle (unique).
+  let meta: string;
+  if (e.slug === 'boum-chicken') {
+    meta = `${count} adresse · Drive 7j/7`;
+  } else if (drives === count) {
+    meta = `${count} adresse${count > 1 ? 's' : ''} · Drive`;
+  } else if (drives > 0) {
+    meta = `${count} adresses · ${drives} drive${drives > 1 ? 's' : ''}`;
+  } else {
+    meta = `${count} adresse${count > 1 ? 's' : ''}`;
+  }
+
+  return {
+    ...e,
+    image: enseigneImg[e.slug],
+    meta,
+    signatures: SIGNATURES[e.slug] ?? [],
+  };
+});
 ---
 
 <Layout title={title} description={description} schema={organizationSchema}>
   {/* ═══════════════ 1. HERO ═══════════════ */}
+  {/* min-height uses dvh on supporting browsers (iOS Safari URL-bar safe) */}
   <section
     class="relative texture-bg overflow-hidden"
-    style="padding-top: var(--hh); min-height: calc(100vh - 40px);"
+    style="padding-top: var(--hh); min-height: calc(100vh - 40px); min-height: calc(100dvh - 40px);"
   >
     {/* Background decorative shapes — parallax driven by Layout script */}
     <img
@@ -58,20 +103,36 @@ const organizationSchema = {
       data-parallax="0.2"
     />
 
-    <div class="container-wide relative z-10 min-h-[calc(100vh-110px)] flex items-center py-12 lg:py-16">
+    {/* Inner min-height keeps the rotator vertically centered in viewport. */}
+    {/* Arbitrary dvh value: Tailwind 3.4 supports dvh in [...]; older     */}
+    {/* browsers fall back to the same calc with vh via natural cascade.   */}
+    <div class="container-wide relative z-10 min-h-[calc(100dvh-110px)] flex items-center py-12 lg:py-16">
       <HeroRotator client:load />
     </div>
 
-    {/* Red bottom banner — verbatim from monboum.fr */}
+    {/* Red bottom banner — emotional/punchline angle.                   */}
+    {/* The top announcement (Layout.astro) handles the factual angle.   */}
+    {/* 4 unique phrases × 2 cycles for seamless marquee-50% loop.       */}
     <div class="relative z-20 bg-rouge py-3 overflow-hidden">
       <div class="marquee-inner font-display text-white uppercase text-sm md:text-base tracking-wider">
-        {Array.from({ length: 6 }).map(() => (
-          <span class="mx-8 whitespace-nowrap">
+        {Array.from({ length: 2 }).flatMap((_, cycle) => [
+          <span class="mx-8 whitespace-nowrap" key={`a-${cycle}`}>
             Le meilleur du street-food <span class="opacity-80">👍</span>
-            <span class="mx-4">·</span>
+            <span class="mx-4 opacity-60">·</span>
+          </span>,
+          <span class="mx-8 whitespace-nowrap" key={`b-${cycle}`}>
             Faites-vous livrer de votre canapé <span class="opacity-80">;)</span>
-          </span>
-        ))}
+            <span class="mx-4 opacity-60">·</span>
+          </span>,
+          <span class="mx-8 whitespace-nowrap" key={`c-${cycle}`}>
+            Une envie de boum <span class="opacity-80">🔥</span>
+            <span class="mx-4 opacity-60">·</span>
+          </span>,
+          <span class="mx-8 whitespace-nowrap" key={`d-${cycle}`}>
+            Frais. Maison. Halal.
+            <span class="mx-4 opacity-60">·</span>
+          </span>,
+        ])}
       </div>
     </div>
   </section>
@@ -79,35 +140,84 @@ const organizationSchema = {
   <GrungeSeparator fromDark={true} />
 
   {/* ═══════════════ 2. BIENVENUE / BON APPÉTIT ═══════════════ */}
+  {/* Densification éditoriale : 1 phrase → 3 paragraphes structurés      */}
+  {/* + inline stats (2004 / 10 / 1er) + dual-CTA (concept + restos).     */}
   <section class="bg-white py-20 md:py-28">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div data-reveal>
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Bienvenue
+            Toulouse · 2004
           </p>
           <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-6">
             Bon <span class="text-rouge">appétit.</span>
           </h2>
-          <p class="font-body text-lg text-noir/70 leading-relaxed mb-8">
-            Depuis 2004, le groupe <strong>« Mon Boum »</strong> est présent sur
-            la région toulousaine avec 10 restaurants. Un concept qui marche.
+
+          {/* Para 1 — origine + claim signature */}
+          <p class="font-body text-lg text-noir/75 leading-relaxed mb-5">
+            Le groupe <strong>« Mon Boum »</strong> est né à Toulouse en
+            <strong> 2004</strong>. Plus qu'un fast-food : le
+            <strong class="text-rouge"> 1er réseau de drive halal de France</strong>,
+            monté par une équipe d'ici qui voulait du bon, du frais et du
+            sans-compromis.
           </p>
-          <a
-            href="/mon-boum"
-            class="inline-block bg-noir text-white font-display uppercase text-sm px-8 py-4 hover:bg-rouge transition-colors"
-          >
-            En savoir plus
-          </a>
+
+          {/* Para 2 — les 4 enseignes + Boum Team identity */}
+          <p class="font-body text-lg text-noir/75 leading-relaxed mb-5">
+            <strong>4 enseignes</strong> — Boum Burger, Boum Pizz's, Boum
+            Chicken, Boum Saveurs — réparties sur <strong>10 restaurants</strong>
+            entre Toulouse et son agglo. Un goût, une famille, une équipe : la
+            <strong> Boum Team</strong>.
+          </p>
+
+          {/* Para 3 — promesse + double mode (sur place / livraison) */}
+          <p class="font-body text-lg text-noir/75 leading-relaxed mb-8">
+            Frais, halal certifié, préparé maison. Mangez chez nous, ou
+            faites-vous livrer de votre canapé.
+          </p>
+
+          {/* Inline stats — 3 chiffres clés, séparateurs verticaux */}
+          <div class="grid grid-cols-3 gap-0 mb-10 border-y border-noir/10 py-6">
+            <div class="text-center border-r border-noir/10">
+              <p class="font-display text-3xl md:text-4xl text-rouge uppercase leading-none">2004</p>
+              <p class="font-body text-[10px] md:text-xs text-noir/60 uppercase tracking-[0.2em] mt-2">Depuis</p>
+            </div>
+            <div class="text-center border-r border-noir/10">
+              <p class="font-display text-3xl md:text-4xl text-rouge uppercase leading-none">10</p>
+              <p class="font-body text-[10px] md:text-xs text-noir/60 uppercase tracking-[0.2em] mt-2">Restaurants</p>
+            </div>
+            <div class="text-center">
+              <p class="font-display text-3xl md:text-4xl text-rouge uppercase leading-none">1er</p>
+              <p class="font-body text-[10px] md:text-xs text-noir/60 uppercase tracking-[0.2em] mt-2">Drive halal France</p>
+            </div>
+          </div>
+
+          {/* Dual-CTA : concept (primary) + restos (secondary) */}
+          <div class="flex flex-wrap gap-3">
+            <a
+              href="/mon-boum"
+              class="inline-flex items-center gap-2 bg-noir text-white font-display uppercase text-sm px-7 py-4 hover:bg-rouge transition-colors arrow-cta"
+            >
+              Mon Boum c'est quoi&nbsp;?
+              <span data-arrow aria-hidden="true">→</span>
+            </a>
+            <a
+              href="/nos-restaurants"
+              class="inline-flex items-center gap-2 border border-noir/20 text-noir font-display uppercase text-sm px-7 py-4 hover:bg-noir hover:text-white transition-colors arrow-cta"
+            >
+              Voir nos 10 restos
+              <span data-arrow aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
 
         <div class="relative" data-reveal data-d="2">
           <img
             src="/assets/banners/welcome_image.png"
             alt="Mon Boum depuis 2004"
-            class="w-full h-auto max-w-md mx-auto"
-            width="523"
-            height="502"
+            class="w-full h-auto max-w-md mx-auto float-anim"
+            width="428"
+            height="493"
             loading="lazy"
             decoding="async"
           />
@@ -123,11 +233,13 @@ const organizationSchema = {
   </section>
 
   {/* ═══════════════ 3. FAITES VOTRE CHOIX (4 enseignes) ═══════════════ */}
+  {/* Densification : badge + nom + label (existing) + meta (count/drive) */}
+  {/* + signatures (top-3 plats authentiques) + affordance "Voir →".     */}
   <section class="bg-gris py-20 md:py-28">
     <div class="container-wide">
       <div class="text-center mb-16" data-reveal>
         <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-          Nos enseignes
+          4 enseignes · 1 famille
         </p>
         <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none">
           Faites <span class="text-rouge">votre choix.</span>
@@ -135,43 +247,60 @@ const organizationSchema = {
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-        {Object.values(ENSEIGNES).map((enseigne, i) => {
-          const imgMap = {
-            'boum-burger': '/assets/banners/Boum-Burgers.png',
-            'boum-pizzs': '/assets/banners/BOUM-Pizzs.png',
-            'boum-chicken': '/assets/banners/Boum-Chicken.png',
-            'boum-saveurs': '/assets/banners/Boum-Saveurs.png',
-          };
-          return (
-            <a
-              href={enseigne.path}
-              class="group block bg-white p-8 hover:shadow-xl transition-shadow relative overflow-hidden"
-              data-reveal
-              data-d={String(i + 1)}
-            >
-              <div class="aspect-square flex items-center justify-center mb-4 img-zoom">
-                <img
-                  src={imgMap[enseigne.slug]}
-                  alt={enseigne.nom}
-                  class="w-full h-full object-contain"
-                  width="300"
-                  height="300"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <h3 class="font-display text-xl md:text-2xl text-noir uppercase group-hover:text-rouge transition-colors">
-                {enseigne.nom}
-              </h3>
-              <p class="font-body text-xs text-noir/60 mt-1">{enseigne.label}</p>
-            </a>
-          );
-        })}
+        {enseigneCards.map((card, i) => (
+          <a
+            href={card.path}
+            class="group block bg-white p-6 md:p-8 hover:shadow-2xl transition-shadow relative overflow-hidden shine-card hover-lift flex flex-col"
+            data-reveal
+            data-d={String(i + 1)}
+          >
+            {/* Brand badge — kept as the visual anchor */}
+            <div class="aspect-square flex items-center justify-center mb-4 img-zoom">
+              <img
+                src={card.image}
+                alt={card.nom}
+                class="w-full h-full object-contain"
+                width="300"
+                height="300"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+
+            <h3 class="font-display text-xl md:text-2xl text-noir uppercase group-hover:text-rouge transition-colors text-glow-rouge">
+              {card.nom}
+            </h3>
+            <p class="font-body text-xs text-noir/60 mt-1">{card.label}</p>
+
+            {/* Meta — count + drive flag, derived from restaurants.js */}
+            <p class="font-body text-[10px] md:text-xs text-rouge font-bold uppercase tracking-[0.18em] mt-4 pt-4 border-t border-noir/10">
+              {card.meta}
+            </p>
+
+            {/* Signature dishes — authentic, sourced from menus.js + TikTok */}
+            {card.signatures.length > 0 && (
+              <p class="font-body text-[11px] md:text-xs text-noir/55 italic mt-2 leading-snug flex-1">
+                {card.signatures.join(' · ')}
+              </p>
+            )}
+
+            {/* Hover affordance — subtle "Voir la carte" with arrow slide */}
+            <p class="font-body text-[10px] md:text-xs text-noir font-bold uppercase tracking-[0.18em] mt-4 flex items-center gap-1 group-hover:text-rouge transition-colors arrow-cta">
+              Voir la carte
+              <span data-arrow aria-hidden="true">→</span>
+            </p>
+          </a>
+        ))}
       </div>
     </div>
   </section>
 
+  {/* ═══════════════ 3.5 PRODUITS STARS (Phase D — boss feedback 2026-05-04) ═══════════════ */}
+  <ProductShowcase />
+
   {/* ═══════════════ 4. QUALITÉ / TRAÇABILITÉ ═══════════════ */}
+  {/* Densification : intro éditorial + 4 bullets "title fort + spec".    */}
+  {/* Eyebrow "Halal · Frais · Maison" — echo voulu du marquee Section 1. */}
   <section class="bg-white py-20 md:py-28">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -180,8 +309,8 @@ const organizationSchema = {
             src="/assets/banners/BOUM-BURGER-SINCE.png"
             alt="Qualité Mon Boum depuis 2004"
             class="w-full h-auto max-w-lg mx-auto"
-            width="1366"
-            height="768"
+            width="635"
+            height="376"
             loading="lazy"
             decoding="async"
           />
@@ -189,28 +318,69 @@ const organizationSchema = {
 
         <div class="order-1 lg:order-2" data-reveal data-d="2">
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Notre engagement
+            Halal · Frais · Maison
           </p>
-          <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-8">
+          <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-6">
             Qualité, saveur<br />
             <span class="text-rouge">et traçabilité.</span>
           </h2>
-          <ul class="space-y-3 font-body text-noir/70">
-            <li class="flex items-start gap-3">
-              <span class="text-rouge font-bold mt-1">→</span>
-              <span>Viandes 100% halal certifiées</span>
+
+          {/* Intro éditoriale — pose le contexte avant la checklist */}
+          <p class="font-body text-base md:text-lg text-noir/70 leading-relaxed mb-8">
+            Depuis 2004, une seule règle : du bon, du frais, du
+            sans-compromis. Des viandes halal certifiées, du pain frais chaque
+            jour, des préparations maison dans chacun de nos
+            <strong> 10 restaurants</strong>.
+          </p>
+
+          {/* Bullets enrichis — title fort uppercase + 1 spec courte */}
+          <ul class="space-y-5 font-body">
+            <li class="flex items-start gap-4">
+              <span class="font-display text-rouge text-xl leading-none mt-0.5 shrink-0">→</span>
+              <div>
+                <p class="font-display text-noir uppercase tracking-wider text-sm md:text-base mb-1">
+                  100% Halal certifié
+                </p>
+                <p class="text-sm text-noir/65 leading-relaxed">
+                  Bœuf, poulet, agneau — toutes nos viandes sont certifiées
+                  halal.
+                </p>
+              </div>
             </li>
-            <li class="flex items-start gap-3">
-              <span class="text-rouge font-bold mt-1">→</span>
-              <span>Produits frais, sélection rigoureuse</span>
+            <li class="flex items-start gap-4">
+              <span class="font-display text-rouge text-xl leading-none mt-0.5 shrink-0">→</span>
+              <div>
+                <p class="font-display text-noir uppercase tracking-wider text-sm md:text-base mb-1">
+                  Produits frais
+                </p>
+                <p class="text-sm text-noir/65 leading-relaxed">
+                  Sélection rigoureuse, livraisons régulières, qualité tenue
+                  bout en bout.
+                </p>
+              </div>
             </li>
-            <li class="flex items-start gap-3">
-              <span class="text-rouge font-bold mt-1">→</span>
-              <span>Pain artisanal, préparations maison</span>
+            <li class="flex items-start gap-4">
+              <span class="font-display text-rouge text-xl leading-none mt-0.5 shrink-0">→</span>
+              <div>
+                <p class="font-display text-noir uppercase tracking-wider text-sm md:text-base mb-1">
+                  Cuisiné sur place
+                </p>
+                <p class="text-sm text-noir/65 leading-relaxed">
+                  Pain artisanal, sauces maison, galettes préparées chaque
+                  jour.
+                </p>
+              </div>
             </li>
-            <li class="flex items-start gap-3">
-              <span class="text-rouge font-bold mt-1">→</span>
-              <span>Traçabilité complète de la ferme à l'assiette</span>
+            <li class="flex items-start gap-4">
+              <span class="font-display text-rouge text-xl leading-none mt-0.5 shrink-0">→</span>
+              <div>
+                <p class="font-display text-noir uppercase tracking-wider text-sm md:text-base mb-1">
+                  Traçabilité
+                </p>
+                <p class="text-sm text-noir/65 leading-relaxed">
+                  De la ferme à l'assiette — chaque ingrédient a son origine.
+                </p>
+              </div>
             </li>
           </ul>
         </div>
@@ -221,6 +391,8 @@ const organizationSchema = {
   <GrungeSeparator fromDark={false} />
 
   {/* ═══════════════ 5. LIVRAISON ═══════════════ */}
+  {/* Densification : intro éditoriale + 3 info-pills (7j/7 / 30min / zone)*/}
+  {/* + dual-CTA (Deliveroo primary + nos-restaurants pour Drive / sur place) */}
   <section class="texture-bg-deep py-20 md:py-28 relative overflow-hidden">
     <img
       src="/assets/shapes/shape2-min.png"
@@ -235,19 +407,52 @@ const organizationSchema = {
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
             Nous arrivons chez vous 🙂
           </p>
-          <h2 class="font-display text-5xl md:text-6xl text-white uppercase leading-none mb-8">
+          <h2 class="font-display text-5xl md:text-6xl text-white uppercase leading-none mb-6">
             Le meilleur<br />
             du <span class="text-rouge">Street Food</span><br />
             livré chez vous.
           </h2>
-          <a
-            href="https://monboum.commande.deliveroo.fr/fr/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-block bg-rouge text-white font-display uppercase text-base px-10 py-5 hover:bg-white hover:text-rouge transition-colors"
-          >
-            Commander
-          </a>
+
+          {/* Intro éditoriale — scope + simplicité */}
+          <p class="font-body text-base md:text-lg text-white/70 leading-relaxed mb-8 max-w-md">
+            Toulouse, son agglo, et tout votre canapé. Commandez en 2 clics
+            sur Deliveroo, on s'occupe du reste. Ou venez en
+            <strong class="text-white"> drive</strong> dans un de nos
+            <strong class="text-white"> 10 restos</strong>.
+          </p>
+
+          {/* Info-pills — scope concret, voice court */}
+          <div class="flex flex-wrap gap-2 mb-10">
+            <span class="font-body text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-white/85 bg-white/10 border border-white/20 px-3 py-1.5">
+              Livré 7j/7
+            </span>
+            <span class="font-body text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-white/85 bg-white/10 border border-white/20 px-3 py-1.5">
+              30 min en moyenne
+            </span>
+            <span class="font-body text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-white/85 bg-white/10 border border-white/20 px-3 py-1.5">
+              Toulouse + agglo
+            </span>
+          </div>
+
+          {/* Dual-CTA : Deliveroo (primary) + drive/sur place (secondary) */}
+          <div class="flex flex-wrap gap-3">
+            <a
+              href="https://monboum.commande.deliveroo.fr/fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-3 bg-rouge text-white font-display uppercase text-base px-9 py-5 hover:bg-white hover:text-rouge transition-colors arrow-cta pulse-rouge"
+            >
+              Commander
+              <span data-arrow aria-hidden="true">→</span>
+            </a>
+            <a
+              href="/nos-restaurants"
+              class="inline-flex items-center gap-3 border border-white/30 text-white font-display uppercase text-base px-7 py-5 hover:bg-white hover:text-noir transition-colors arrow-cta"
+            >
+              Drive ou sur place
+              <span data-arrow aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
 
         <div class="relative" data-reveal data-d="2">
@@ -255,8 +460,8 @@ const organizationSchema = {
             src="/assets/banners/Commandez.png"
             alt="Livraison Deliveroo — Mon Boum"
             class="w-full h-auto max-w-md mx-auto float-anim"
-            width="4112"
-            height="3438"
+            width="1263"
+            height="2578"
             loading="lazy"
             decoding="async"
           />

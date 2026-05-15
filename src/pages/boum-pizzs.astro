@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
+import CarteSection from '../components/CarteSection.astro';
 import {
   byEnseigne,
   ENSEIGNES,
@@ -80,8 +81,8 @@ const description =
             src="/assets/banners/Boum-Pizzs-1.png"
             alt="Boum Pizz's — Pizza & Tacos halal"
             class="w-full h-auto"
-            width="1366"
-            height="768"
+            width="468"
+            height="471"
             loading="eager"
             fetchpriority="high"
             decoding="async"
@@ -136,6 +137,12 @@ const description =
       </div>
     </div>
   </section>
+
+  {/* ═══════════════ CARTE (Phase C — boss feedback 2026-05-04) ═══════════════ */}
+  <CarteSection
+    slug="boum-pizzs"
+    deliverooUrl={locations[0]?.deliverooUrl || 'https://monboum.commande.deliveroo.fr/fr/'}
+  />
 
   {/* ═══════════════ LOCATIONS ═══════════════ */}
   <section id="locations" class="bg-gris py-20 md:py-28 scroll-mt-24">

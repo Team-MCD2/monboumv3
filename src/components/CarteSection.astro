@@ -1,0 +1,310 @@
+---
+// ═══════════════════════════════════════════════════════════════
+// CarteSection — per-enseigne menu surface (Phase C, boss feedback
+// 2026-05-04 : "ajouter les cartes (menu) et les photos qui donne
+// envie").
+//
+// Renders three blocks:
+//   1. The menu-board image grid (clickable native <dialog> lightbox).
+//   2. The curated item grid (named products with photos, BK-style).
+//   3. A note (optional, e.g. "Carte bientôt en ligne" for boum-saveurs).
+//
+// Self-contained: ships its own lightbox markup + script. Multiple
+// instances on different pages won't collide because the dialog id
+// is namespaced via the `id` prop.
+//
+// See .project-store/decisions.md ADR-005, ADR-006, ADR-007.
+// ═══════════════════════════════════════════════════════════════
+import { getMenu } from '../data/menus.js';
+
+interface Props {
+  /** enseigne slug — must match a key in src/data/menus.js */
+  slug: string;
+  /** dialog DOM id — defaults to `carte-<slug>` */
+  id?: string;
+  /** Deliveroo URL for the bottom CTA (per-enseigne or global) */
+  deliverooUrl: string;
+}
+
+const { slug, id, deliverooUrl } = Astro.props as Props;
+const data = getMenu(slug);
+const dialogId = id ?? `carte-${slug}`;
+
+// Defensive : if a slug is missing data we still render the heading
+// + a friendly fallback rather than crashing the page build.
+const enseigne = data?.enseigne ?? slug;
+const boards = data?.boards ?? [];
+const items = data?.items ?? [];
+const note = data?.note;
+const hasContent = boards.length > 0 || items.length > 0;
+---
+
+<section class="bg-noir-deep py-20 md:py-28 relative overflow-hidden">
+  {/* Decorative shapes — same primitives as home ProductShowcase */}
+  <img
+    src="/assets/shapes/shape1-min.png"
+    alt=""
+    aria-hidden="true"
+    class="absolute -top-16 -right-12 w-64 md:w-80 opacity-[0.04] spin-slow"
+    data-parallax="0.12"
+  />
+  <img
+    src="/assets/shapes/shape3-min.png"
+    alt=""
+    aria-hidden="true"
+    class="absolute bottom-12 -left-16 w-48 opacity-[0.04] float-anim"
+  />
+
+  <div class="container-wide relative z-10">
+    {/* Heading */}
+    <div class="text-center mb-12 md:mb-16" data-reveal>
+      <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
+        La carte
+      </p>
+      <h2 class="font-display text-5xl md:text-6xl lg:text-7xl text-white uppercase leading-none">
+        {enseigne}<br />
+        <span class="text-rouge">à la carte.</span>
+      </h2>
+      {hasContent && (
+        <p class="font-body text-base text-white/60 mt-6 max-w-xl mx-auto">
+          Cliquez sur une carte pour la voir en grand. Sélection complète
+          en restaurant ou sur Deliveroo.
+        </p>
+      )}
+    </div>
+
+    {/* Board grid — max 2 columns so boards stay readable */}
+    {boards.length > 0 && (
+      <div class={`grid gap-6 md:gap-8 mb-14 md:mb-20 ${
+        boards.length === 1
+          ? 'grid-cols-1 max-w-4xl mx-auto'
+          : 'grid-cols-1 md:grid-cols-2 max-w-6xl mx-auto'
+      }`}>
+        {boards.map((b, i) => (
+          <div class="flex flex-col" data-reveal data-d={String((i % 4) + 1)}>
+            <button
+              type="button"
+              data-board
+              data-src={b.src}
+              data-alt={b.alt}
+              data-target={dialogId}
+              class="group relative block overflow-hidden bg-noir border border-white/10 hover:border-rouge transition-all duration-300 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-rouge focus-visible:ring-offset-2 focus-visible:ring-offset-noir-deep cursor-zoom-in shadow-lg hover:shadow-2xl hover:shadow-rouge/20"
+              aria-label={`Voir en grand : ${b.alt}`}
+              style="cursor: zoom-in;"
+            >
+              {/* Category badge — always visible, top-left */}
+              <span class="absolute top-3 left-3 z-10 bg-rouge text-white font-display uppercase text-xs tracking-wider px-3 py-1.5 shadow-lg">
+                {b.category}
+              </span>
+
+              {/* Board image — contained so tall boards render fully */}
+              <div class="aspect-[4/3] overflow-hidden bg-noir flex items-center justify-center p-2">
+                <img
+                  src={b.src}
+                  alt={b.alt}
+                  class="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+                  width="1024"
+                  height="768"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              {/* Full-card hover overlay with magnifier */}
+              <div
+                class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-rouge/85 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"
+                aria-hidden="true"
+              >
+                <svg
+                  class="w-14 h-14 text-white drop-shadow-lg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  <line x1="11" y1="8" x2="11" y2="14" />
+                  <line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+                <span class="font-display uppercase text-white text-lg tracking-wider">
+                  Cliquez pour agrandir
+                </span>
+              </div>
+            </button>
+
+            {/* Caption under the board — explicit textual hint */}
+            <p class="font-body text-xs text-white/50 mt-3 text-center italic">
+              {b.alt} — <span class="text-rouge not-italic">cliquez pour zoomer</span>
+            </p>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {/* Item grid */}
+    {items.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {items.map((it, i) => (
+          <article
+            class="group relative overflow-hidden bg-noir border border-white/10"
+            data-reveal
+            data-d={String((i % 3) + 1)}
+          >
+            <div class="aspect-[4/3] overflow-hidden bg-noir">
+              <img
+                src={it.image}
+                alt={it.name}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                width="1200"
+                height="900"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="p-6">
+              <p class="font-body text-[10px] text-rouge uppercase tracking-[0.25em] mb-2">
+                {it.category}
+              </p>
+              <h3 class="font-display text-2xl md:text-3xl text-white uppercase leading-none mb-3">
+                {it.name}
+              </h3>
+              <p class="font-body text-sm text-white/60 leading-relaxed">
+                {it.description}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+
+    {/* Note */}
+    {note && (
+      <p
+        class="font-body text-sm text-white/60 italic max-w-2xl mx-auto mt-10 text-center"
+        data-reveal
+      >
+        {note}
+      </p>
+    )}
+
+    {/* Tail CTA */}
+    <div class="text-center mt-12 md:mt-16" data-reveal>
+      <a
+        href={deliverooUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-3 bg-rouge text-white font-display uppercase text-base px-10 py-5 hover:bg-white hover:text-rouge transition-colors arrow-cta pulse-rouge"
+      >
+        Commander sur Deliveroo
+        <span data-arrow aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+
+  {/* Lightbox dialog (native HTML). Empty until a board is clicked. */}
+  <dialog
+    id={dialogId}
+    class="bg-noir-deep text-white p-0 m-0 max-w-[100vw] max-h-[100vh] w-full h-full backdrop:bg-black/90"
+    aria-label={`Carte ${enseigne} agrandie`}
+  >
+    <div class="relative w-full h-full flex flex-col items-center justify-center p-4 md:p-8">
+      {/* Close button — always above everything */}
+      <button
+        type="button"
+        data-close-lightbox
+        class="absolute z-20 w-12 h-12 flex items-center justify-center bg-rouge text-white hover:bg-white hover:text-rouge focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-noir-deep transition-colors shadow-xl"
+        style="top: max(1rem, env(safe-area-inset-top, 1rem)); right: max(1rem, env(safe-area-inset-right, 1rem));"
+        aria-label="Fermer la carte"
+      >
+        <svg
+          class="w-7 h-7"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      {/* Zoom hint — bottom centre, fades out after 3s */}
+      <div
+        data-zoom-hint
+        class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-body text-xs px-4 py-2 pointer-events-none transition-opacity duration-500"
+      >
+        <span class="md:hidden">Pincez pour zoomer · Appuyez hors de la carte pour fermer</span>
+        <span class="hidden md:inline">Ctrl + molette pour zoomer · Cliquez hors de la carte pour fermer</span>
+      </div>
+
+      {/* Image — scrollable container so large boards are fully explorable */}
+      <div class="w-full h-full overflow-auto flex items-center justify-center" data-lightbox-scroll>
+        <img
+          data-lightbox-img
+          src=""
+          alt=""
+          class="max-w-full max-h-[90vh] object-contain select-none"
+        />
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<script define:vars={{ dialogId }}>
+  // Wire up board buttons -> dialog. Self-contained per-section so
+  // multiple CarteSection instances on the same page do not interfere.
+  const dialog = document.getElementById(dialogId);
+  if (dialog instanceof HTMLDialogElement) {
+    const img = dialog.querySelector('[data-lightbox-img]');
+    const closeBtn = dialog.querySelector('[data-close-lightbox]');
+
+    const hint = dialog.querySelector('[data-zoom-hint]');
+    let hintTimer = null;
+
+    document
+      .querySelectorAll(`[data-board][data-target="${dialogId}"]`)
+      .forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const src = btn.getAttribute('data-src') || '';
+          const alt = btn.getAttribute('data-alt') || '';
+          if (img instanceof HTMLImageElement) {
+            img.src = src;
+            img.alt = alt;
+          }
+          if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+            // Lock body scroll while open.
+            document.body.style.overflow = 'hidden';
+            // Flash the zoom hint then fade it.
+            if (hint instanceof HTMLElement) {
+              hint.style.opacity = '1';
+              clearTimeout(hintTimer);
+              hintTimer = setTimeout(() => {
+                hint.style.opacity = '0';
+              }, 3000);
+            }
+          }
+        });
+      });
+
+    closeBtn?.addEventListener('click', () => dialog.close());
+
+    // Click on backdrop closes the dialog.
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    // Restore body scroll on close (fires for Escape, backdrop, button).
+    dialog.addEventListener('close', () => {
+      document.body.style.overflow = '';
+      if (hint instanceof HTMLElement) hint.style.opacity = '';
+      clearTimeout(hintTimer);
+    });
+  }
+</script>

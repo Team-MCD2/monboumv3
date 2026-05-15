@@ -108,6 +108,24 @@ const faqJsonLd = faq.length > 0 ? {
   <body>
     <a href="#main" class="skip-link">Aller au contenu principal</a>
 
+    <!-- Top announcement marquee (Phase G, 2026-05-05) ─────────── -->
+    <div class="bg-noir text-white py-1.5 overflow-hidden border-b border-white/10">
+      <div class="marquee-inner-slow font-display uppercase text-[11px] md:text-xs tracking-[0.22em]">
+        {Array.from({ length: 8 }).map(() => (
+          <span class="mx-6 whitespace-nowrap flex items-center gap-6">
+            <span>Ouvert 7/7</span>
+            <span class="text-rouge">●</span>
+            <span>Livraison Deliveroo</span>
+            <span class="text-rouge">●</span>
+            <span>10 restaurants à Toulouse</span>
+            <span class="text-rouge">●</span>
+            <span>Halal depuis 2004</span>
+            <span class="text-rouge">●</span>
+          </span>
+        ))}
+      </div>
+    </div>
+
     <Header />
 
     <main id="main">

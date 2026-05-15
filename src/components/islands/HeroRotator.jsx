@@ -8,28 +8,39 @@
 import { useEffect, useState, useRef } from 'react';
 import ErrorBoundary from './_ErrorBoundary.jsx';
 
+// wrapperClass : per-slide size + rotation overrides.
+// Commandez.png is a 1263×2578 portrait phone mockup — left at its natural
+// scale it dominates the layout. We size it down + tilt it slightly so it
+// reads as a decorative side element, not a billboard.
 const SLIDES = [
   {
+    eyebrow: 'Mon Boum · Toulouse · Halal',
     line1: 'LE MEILLEUR DU STREET-FOOD',
     line2: 'HALAL.',
     image: '/assets/banners/slider_image2.png',
     imageAlt: 'Pile de burgers Mon Boum',
+    wrapperClass: 'max-w-md lg:max-w-lg',
   },
   {
+    eyebrow: 'Livré 7j/7 · Toulouse + agglo',
     line1: 'LIVRAISON EN 30 MIN',
     line2: 'À TOULOUSE.',
     image: '/assets/banners/Commandez.png',
     imageAlt: 'Livraison Mon Boum — scooter',
+    wrapperClass:
+      'max-w-[240px] md:max-w-[280px] lg:max-w-[320px] rotate-[4deg]',
   },
   {
-    line1: '10 RESTAURANTS',
-    line2: 'DEPUIS 2004.',
-    image: null, // no product image — shapes only
-    imageAlt: '',
+    eyebrow: 'Depuis 2004 · 10 restaurants',
+    line1: '1er DRIVE HALAL',
+    line2: 'DE FRANCE.',
+    image: '/assets/products/boum-drive-lifestyle.jpg',
+    imageAlt: 'Drive Mon Boum — 1er drive halal de France depuis 2004',
+    wrapperClass: 'max-w-md lg:max-w-xl',
   },
 ];
 
-const ROTATION_MS = 5000;
+const ROTATION_MS = 7000;
 
 // ── Fallback shown if the rotator throws at runtime ────────────
 function HeroFallback() {
@@ -48,9 +59,10 @@ function HeroFallback() {
           href="https://monboum.commande.deliveroo.fr/fr/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-rouge text-white font-display uppercase text-base px-8 py-4"
+          className="inline-flex items-center gap-2 bg-rouge text-white font-display uppercase text-base px-8 py-4 arrow-cta pulse-rouge"
         >
           Commander
+          <span data-arrow aria-hidden="true">→</span>
         </a>
       </div>
     </div>
@@ -90,11 +102,14 @@ function HeroRotatorImpl() {
 
   return (
     <div className="relative w-full h-full flex flex-col lg:flex-row items-center lg:items-stretch justify-between gap-8 lg:gap-0">
-      {/* ─── Text column ───────────────────────────────────────── */}
+      {/* ─── Text column ────────────────────────────── */}
       <div className="relative z-10 flex-1 flex flex-col justify-center">
-        <p className="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-4">
-          Mon Boum · Toulouse · Halal
-        </p>
+        {/* Eyebrow cross-fades with the slide */}
+        <div key={`eyebrow-${index}`} style={transitionStyle}>
+          <p className="rise-1 font-body text-xs md:text-sm text-rouge uppercase tracking-[0.3em] mb-4">
+            {current.eyebrow}
+          </p>
+        </div>
 
         {/* Key triggers React to re-mount → cross-fade */}
         <div key={`text-${index}`} style={transitionStyle}>
@@ -113,15 +128,17 @@ function HeroRotatorImpl() {
             href="https://monboum.commande.deliveroo.fr/fr/"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+            className="inline-flex items-center gap-2 bg-rouge text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors arrow-cta pulse-rouge"
           >
             Commander
+            <span data-arrow aria-hidden="true">→</span>
           </a>
           <a
             href="/nos-restaurants"
-            className="border border-white/30 text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors"
+            className="inline-flex items-center gap-2 border border-white/30 text-white font-display uppercase text-base px-8 py-4 hover:bg-white hover:text-noir transition-colors arrow-cta"
           >
             Nos Restaurants
+            <span data-arrow aria-hidden="true">→</span>
           </a>
         </div>
 
@@ -144,35 +161,22 @@ function HeroRotatorImpl() {
         )}
       </div>
 
-      {/* ─── Image column ──────────────────────────────────────── */}
-      <div className="relative z-10 flex-1 flex items-center justify-center w-full lg:w-auto h-64 md:h-96 lg:h-auto">
-        {current.image ? (
+      {/* ─── Image column — fixed track height; per-slide wrapper sizes ─── */}
+      {/* Wrapper is keyed by index → cross-fade + per-slide max-w + rotate. */}
+      <div className="relative z-10 flex-1 flex items-center justify-center w-full lg:w-auto h-64 md:h-96 lg:h-full max-h-[55vh] lg:max-h-[60vh]">
+        <div
+          key={`img-${index}`}
+          className={`${current.wrapperClass} float-anim`}
+          style={transitionStyle}
+        >
           <img
-            key={`img-${index}`}
             src={current.image}
             alt={current.imageAlt}
-            className="max-h-full w-auto object-contain float-anim"
-            style={transitionStyle}
+            className="w-full h-auto max-h-[55vh] lg:max-h-[60vh] object-contain"
             loading="eager"
             decoding="async"
           />
-        ) : (
-          // Slide 3 — no product image, render decorative shapes only
-          <div className="relative w-64 h-64 md:w-96 md:h-96">
-            <img
-              src="/assets/shapes/shape1-min.png"
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-contain spin-slow opacity-30"
-            />
-            <img
-              src="/assets/shapes/shape2-min.png"
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] object-contain float-anim opacity-40"
-            />
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

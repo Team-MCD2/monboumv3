@@ -283,10 +283,11 @@ Why not 100%:
 
 ## 8. Where we stand right now
 
-- **Build**: green
+- **Build**: green (`npm run validate:all` clean as of 2026-05-04 visual-overhaul session — 11 pages, 0 errors, SEO validator OK)
 - **Data validators**: green (`validate:data` + `validate:seo`)
 - **Repo**: clean
-- **Site**: functionally complete on all major pages
+- **Site**: functionally complete on all major pages **+ visual overhaul shipped 2026-05-04** (see section 11)
+- **Knowledge base**: `.project-store/` bootstrapped per M08 — 9 canonical files (`dossier`, `roadmap`, `knowledge`, `decisions`, `log`, `boss-feedback`, `owner-feedback`, `blacklisted`, `discarded`). Treat that folder as the canonical source for ongoing project decisions; `docs/ROADMAP.md` is now legacy reference.
 - **Blocking issues for preview deploy**: none
 - **Blocking issues for production**: only the user-led steps in section 6.1 — browser QA, Deliveroo URL check, Vercel env vars, and the live preview deploy itself.
 
@@ -316,3 +317,74 @@ In short, the project is ready to be **deployed to a Vercel preview immediately*
 - `scripts/validate-seo.mjs` — dist HTML SEO validator
 - `scripts/generate-icons.mjs` — sharp-based PWA icon generator
 - `public/assets/icons/icon-192.png`, `icon-512.png`, `icon-512-maskable.png`, `apple-touch-icon.png`
+
+---
+
+## 11. 2026-05-04 — Visual overhaul session (Phases 0/A/B/C/D/F)
+
+Owner relayed boss feedback on 2026-05-04 flagging four issues:
+(1) missing carte (menu) + photos that "donne envie", with reference to
+newschooltacos / bnwburger / g-ladalle / pointb-officiel ;
+(2) lack of product showcase (Burger King benchmark) ;
+(3) white backgrounds on enseigne logos visible on dark hero sections ;
+(4) "no cross to close" the mobile drawer.
+
+Owner gave autonomy through Phase E ("proceed with defaults") and
+authorized scraping monboum.fr / Deliveroo / Google / IG / TikTok / FB
+for menu data and photos.
+
+### Shipped
+
+- **Phase 0** — `.project-store/` bootstrapped per M08 (9 canonical files).
+- **Phase A** — Drawer-internal close `×` (44×44 tap target, safe-area
+  aware, white SVG, `aria-label="Fermer le menu"`, focus return on
+  close). `src/components/Header.astro`. See ADR-003.
+- **Phase B** — `scripts/derosify-bg.mjs` + `npm run derosify:bg`.
+  Sharp-based alpha-out of near-white pixels with anti-alias feather.
+  Originals backed up to `public/assets/banners/_originals/`. Applied
+  to 8 PNGs — 5 hero banners had 90 %+ white-bg removed
+  (BOUM-BURGER-SINCE, Boum-Pizzs-1, Boum-Chicken-1, welcome_image),
+  4 small home badges already had alpha (0 % modified — expected).
+  See ADR-004.
+- **Phase C** — `src/data/menus.js` + `src/components/CarteSection.astro`.
+  Per-enseigne carte section between CONCEPT and LOCATIONS on all 4
+  `/boum-*` pages. Renders the menu-board image grid (clickable
+  `<dialog>` lightbox), curated highlight items grid, optional note,
+  Deliveroo CTA. Boum Saveurs ships placeholder note (no WP source).
+  See ADR-005, ADR-006, ADR-007.
+- **Phase D** — `src/components/ProductShowcase.astro` inserted on home
+  between brand teasers and quality. 6 signature products from the
+  Pass C scrape (Wall Street, Brooklyn, 5ème Avenue, Le Bucket,
+  Pizza BB, Tacos XXL). bg-noir-deep + Anton headline + rouge accent.
+- **Phase F** — `decisions.md` ADR-008 codifies the reference-site
+  contextualisation pick list (steal vs skip per site). README "Brand
+  rules" cross-links to `.project-store/decisions.md`.
+
+### New / changed files
+
+- `.project-store/{dossier,roadmap,knowledge,decisions,log,boss-feedback,owner-feedback,blacklisted,discarded}.md` (NEW)
+- `scripts/derosify-bg.mjs` (NEW)
+- `src/components/{ProductShowcase,CarteSection}.astro` (NEW)
+- `src/data/menus.js` (NEW)
+- `src/components/Header.astro` (drawer-internal X)
+- `src/pages/index.astro` (ProductShowcase wired in)
+- `src/pages/boum-{burger,pizzs,chicken,saveurs}.astro` (CarteSection wired in)
+- `package.json` (`derosify:bg` script)
+- `README.md` (Brand rules cross-link to ADR-001..009)
+- `public/assets/menus/*.{jpg,png}` (NEW — 9 menu boards from monboum.fr Pass C scrape)
+- `public/assets/products/*.jpg` (NEW — 14 product photos from monboum.fr Pass C scrape)
+- `public/assets/banners/_originals/*.png` (NEW — pre-derosify backups)
+- `plan/_wp-media-full.json`, `plan/_menu-image-scrape.json` (NEW — scrape archives)
+
+### Phase E — manual QA still owed
+
+Run on a deployed Vercel preview (after Phase 1 of section 6.1 ships):
+
+- Mobile drawer open / close via the new `×` (iOS notch + Android cutout)
+- Carte board lightbox open / close (click backdrop, click ×, Escape)
+- Carte items grid renders 6 burgers / 1 pizza / 3 chicken / 0 saveurs
+- ProductShowcase grid renders 6 cards, each linking to the right enseigne
+- All 8 derosify'd PNGs render with no white halo on `texture-bg` /
+  `bg-noir` / `bg-noir-deep` surfaces
+- Lighthouse mobile on `/`, `/boum-burger`, `/nos-restaurants` — record
+  numbers in `.project-store/log.md`

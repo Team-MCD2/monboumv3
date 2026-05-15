@@ -30,11 +30,11 @@ const enseignes = [
   <div class="container-wide">
     <div class="flex items-center justify-between h-[60px] md:h-[70px]">
       <!-- Logo ─────────────────────────────────────────────── -->
-      <a href="/" class="flex items-center" aria-label="Mon Boum — Accueil">
+      <a href="/" class="flex items-center group" aria-label="Mon Boum — Accueil">
         <img
           src="/assets/logos/logo-mon-boum-home.png"
           alt="Mon Boum"
-          class="h-[52px] md:h-[64px] max-h-full w-auto object-contain"
+          class="h-[52px] md:h-[64px] max-h-full w-auto object-contain logo-entrance transition-transform duration-300 group-hover:scale-105"
           width="120"
           height="140"
           fetchpriority="high"
@@ -49,7 +49,7 @@ const enseignes = [
             <a
               href={link.href}
               class:list={[
-                'font-body text-sm uppercase tracking-wider transition-colors',
+                'font-body text-sm uppercase tracking-wider transition-colors link-underline',
                 currentPath === link.href
                   ? 'text-rouge font-semibold'
                   : 'text-noir hover:text-rouge',
@@ -88,9 +88,10 @@ const enseignes = [
           href="https://monboum.commande.deliveroo.fr/fr/"
           target="_blank"
           rel="noopener noreferrer"
-          class="hidden md:inline-block bg-rouge text-white font-display uppercase text-sm px-5 py-2 hover:bg-noir transition-colors"
+          class="hidden md:inline-flex items-center gap-2 bg-rouge text-white font-display uppercase text-sm px-5 py-2 hover:bg-noir transition-colors arrow-cta pulse-rouge"
         >
           Commander
+          <span data-arrow aria-hidden="true">→</span>
         </a>
 
         <!-- Burger (mobile) -->
@@ -115,6 +116,31 @@ const enseignes = [
     class="fixed inset-0 bg-noir z-40 transform translate-x-full transition-transform duration-300 lg:hidden"
     aria-hidden="true"
   >
+    <!-- Drawer-internal close X (44×44 tap target, safe-area aware).
+         Phase A / boss feedback 2026-05-04: header burger→X transform alone
+         was too subtle on mobile. See .project-store/decisions.md ADR-003. -->
+    <button
+      type="button"
+      data-close-menu
+      class="absolute z-10 w-11 h-11 flex items-center justify-center text-white hover:text-rouge focus:outline-none focus-visible:ring-2 focus-visible:ring-rouge focus-visible:ring-offset-2 focus-visible:ring-offset-noir transition-colors"
+      style="top: max(1rem, env(safe-area-inset-top, 1rem)); right: max(1rem, env(safe-area-inset-right, 1rem));"
+      aria-label="Fermer le menu"
+    >
+      <svg
+        class="w-7 h-7"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+
     <div class="flex flex-col h-full pt-[60px] overflow-y-auto">
       <nav class="flex flex-col p-8 gap-6" aria-label="Navigation mobile">
         {navLinks.map((link) => (
@@ -183,11 +209,18 @@ const enseignes = [
       setMenuOpen(isCurrentlyClosed);
     });
 
-    // Polish: auto-close the mobile menu when any link inside it is clicked.
+    // Polish: auto-close the mobile menu when any link inside it is clicked,
+    // OR when the drawer-internal close X (data-close-menu) is clicked.
     // Astro does full page navigation, so the menu would close on load anyway,
     // but optimistic close makes the transition feel snappy.
-    menu.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => setMenuOpen(false));
+    menu.querySelectorAll('a, [data-close-menu]').forEach((el) => {
+      el.addEventListener('click', () => {
+        setMenuOpen(false);
+        // Return focus to the burger toggle so keyboard users don't lose context.
+        if ((el as HTMLElement).hasAttribute('data-close-menu')) {
+          toggleBtn.focus();
+        }
+      });
     });
 
     // Also close on Escape key for keyboard users

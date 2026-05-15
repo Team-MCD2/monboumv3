@@ -166,6 +166,149 @@ body {
   /* ── Spin lent ───────────────────────────────────────────── */
   @keyframes spin-slow { to { transform: rotate(360deg); } }
   .spin-slow { animation: spin-slow 14s linear infinite; }
+
+  /* ══════════════════════════════════════════════════════════
+     Liveliness pass (Phase G, boss feedback 2026-05-05)
+     Inspired by newschooltacos / bnwburger / pointb-officiel.
+     All classes are additive — apply on existing cards/CTAs.
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── Hover lift ──────────────────────────────────────────── */
+  .hover-lift {
+    transition:
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-6px);
+  }
+
+  /* ── Shine sweep (for product/carte cards) ───────────────── */
+  .shine-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .shine-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.14) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .shine-card:hover::after {
+    transform: translateX(120%);
+  }
+
+  /* ── Arrow slide (for CTAs with a trailing → or data-arrow) ── */
+  .arrow-cta [data-arrow],
+  .arrow-cta::after {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .arrow-cta:hover [data-arrow] {
+    transform: translateX(6px);
+  }
+
+  /* ── Pulse rouge (for primary CTAs at rest) ──────────────── */
+  @keyframes pulse-rouge {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.55); }
+    50%      { box-shadow: 0 0 0 14px rgba(225, 6, 0, 0); }
+  }
+  .pulse-rouge {
+    animation: pulse-rouge 2.4s cubic-bezier(0.66, 0, 0, 1) infinite;
+  }
+  .pulse-rouge:hover {
+    animation-play-state: paused;
+  }
+
+  /* ── Logo entrance (runs once on page load) ───────────────── */
+  @keyframes logo-entrance {
+    0%   { opacity: 0; transform: scale(0.92) translateY(8px); }
+    60%  { opacity: 1; transform: scale(1.02) translateY(-2px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .logo-entrance {
+    animation: logo-entrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* ── Tilt on hover (subtle 3D card) ──────────────────────── */
+  .tilt-hover {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+  }
+  .tilt-hover:hover {
+    transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateZ(4px);
+  }
+
+  /* ── Nav underline grow ──────────────────────────────────── */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 2px;
+    background-color: var(--rouge);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* ── Marquee variants ────────────────────────────────────── */
+  .marquee-inner-slow {
+    display: flex;
+    width: max-content;
+    animation: marquee 45s linear infinite;
+  }
+  .marquee-inner-slow:hover { animation-play-state: paused; }
+
+  /* ── Text glow rouge (brand titles on hover) ─────────────── */
+  .text-glow-rouge {
+    transition: text-shadow 0.3s ease-out;
+  }
+  .text-glow-rouge:hover {
+    text-shadow: 0 0 24px rgba(225, 6, 0, 0.45);
+  }
+
+  /* ── Halo pulse (decorative shape accent on hero) ────────── */
+  @keyframes halo-pulse {
+    0%, 100% { opacity: 0.25; transform: scale(1); }
+    50%      { opacity: 0.45; transform: scale(1.08); }
+  }
+  .halo-pulse {
+    animation: halo-pulse 4s ease-in-out infinite;
+    transform-origin: center;
+  }
+}
+
+/* Reduced-motion users still get the class additions but no animation.
+   Explicit fallback ensures hover:translate still works (transform is
+   not motion by default, it's a final-state change). */
+@media (prefers-reduced-motion: reduce) {
+  .shine-card::after,
+  .pulse-rouge,
+  .logo-entrance,
+  .halo-pulse,
+  .marquee-inner-slow {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
