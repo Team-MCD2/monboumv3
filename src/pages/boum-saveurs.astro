@@ -19,9 +19,9 @@ const loc = locations[0]; // only 1 — Mermoz
 
 const schema = buildEnseigneGraph('boum-saveurs', Astro.site?.toString() || 'https://mon-boum.vercel.app');
 
-const title = `${enseigne.nom} Toulouse Mermoz — Kebab & Naans Halal | Mon Boum`;
+const title = `${enseigne.nom} Toulouse Mermoz — Naan Kebab #1 TikTok | Mon Boum`;
 const description =
-  "Boum Saveurs Mermoz : kebabs et naans halal à Toulouse. L'authenticité du Street-Food oriental, signée Mon Boum.";
+  "Boum Saveurs Mermoz : le naan kebab vu 191K fois sur TikTok, la box du peuple, et la cuisine halal qui régale Toulouse. 191 rue Henri Desbals.";
 ---
 
 <Layout title={title} description={description} schema={schema}>
@@ -56,8 +56,10 @@ const description =
             <span class="text-rouge">SAVEURS.</span>
           </h1>
           <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-6 max-w-lg">
-            <strong class="text-white">Kebabs et naans halal</strong>, façon
-            Street-Food oriental — un nouvel art de vivre, signé Mon Boum.
+            Le <strong class="text-white">Naan Kebab</strong> vu
+            <strong class="text-rouge"> 191K fois sur TikTok</strong>, la
+            <strong class="text-white"> Box du peuple</strong>, et toute la
+            cuisine halal qui fait parler la rue Henri Desbals.
           </p>
 
           <div class="rise-4 mt-8 flex flex-wrap gap-4">
@@ -99,47 +101,64 @@ const description =
   <GrungeSeparator fromDark={true} />
 
   {/* ═══════════════ CONCEPT ═══════════════ */}
-  <section class="bg-white py-20 md:py-28">
+  {/* Densification : claims génériques ("nouvel art de vivre") → 3       */}
+  {/* paragraphes ancrés sur la data réelle (TikTok #1 + #3 views,         */}
+  {/* Mermoz). Stats grid : 191K + 144K + 100% halal — TOUT vérifiable.   */}
+  <section id="concept" class="bg-white py-20 md:py-28 scroll-mt-24">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div data-reveal>
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Notre concept
+            Mermoz · Naan Kebab
           </p>
           <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6">
-            L'<span class="text-rouge">authenticité</span><br />
-            du Street-Food.
+            Le naan kebab<br />
+            <span class="text-rouge">qui défonce TikTok.</span>
           </h2>
-          <div class="space-y-4 font-body text-noir/70">
-            <p>
-              Kebabs à la viande parfaitement grillée, <strong>naans chauds</strong>
-              garnis sur mesure — chaque bouchée raconte une histoire.
-            </p>
-            <p>
-              Viandes <strong>halal certifiées</strong>, préparations maison,
-              sauces généreuses. La qualité Mon Boum, au service d'une nouvelle
-              cuisine.
-            </p>
-          </div>
+
+          {/* Para 1 — Naan Kebab #1 TikTok angle */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            <strong>Naan moelleux, viande généreuse</strong>, la sauce qui va
+            bien. Le naan kebab Boum Saveurs a été
+            <strong class="text-rouge"> vu 191 900 fois sur TikTok</strong> —
+            et on n'a pas fait exprès. C'est juste qu'il est bon.
+          </p>
+
+          {/* Para 2 — Box du peuple #3 TikTok angle */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            À côté, la <strong>Box du peuple</strong> :
+            <strong> viande kebab maison, frites bien dorées, boisson</strong>.
+            Le combo qui tient au corps,
+            <strong class="text-rouge"> 144K vues</strong> aussi. Le snack de
+            référence pour se régaler sans se prendre la tête.
+          </p>
+
+          {/* Para 3 — anchor + halal */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed">
+            <strong>Une seule adresse</strong> : Mermoz, 191 rue Henri Desbals.
+            Viandes halal certifiées, préparations maison. À tester sur place
+            ou en livraison Deliveroo.
+          </p>
         </div>
 
+        {/* Stats grid 2×2 + col-span — TikTok views sourced from tiktok-local.json */}
         <div class="grid grid-cols-2 gap-4" data-reveal data-d="2">
           <div class="bg-noir text-white p-6 text-center">
-            <p class="font-display text-3xl text-rouge mb-1">Kebab</p>
+            <p class="font-display text-4xl text-rouge mb-1">191K</p>
             <p class="font-body text-xs uppercase tracking-wider text-white/60">
-              Viande grillée
+              Naan Kebab · TikTok #1
             </p>
           </div>
           <div class="bg-noir text-white p-6 text-center">
-            <p class="font-display text-3xl text-rouge mb-1">Naans</p>
+            <p class="font-display text-4xl text-rouge mb-1">144K</p>
             <p class="font-body text-xs uppercase tracking-wider text-white/60">
-              Chauds & garnis
+              Box du peuple · TikTok #3
             </p>
           </div>
           <div class="bg-rouge text-white p-6 col-span-2 text-center">
             <p class="font-display text-2xl uppercase">100% halal</p>
             <p class="font-body text-xs uppercase tracking-wider text-white/80 mt-1">
-              Certification rigoureuse
+              Certification rigoureuse · Préparations maison
             </p>
           </div>
         </div>

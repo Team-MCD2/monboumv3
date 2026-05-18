@@ -32,7 +32,11 @@ export const RESTAURANTS = [
     ville: 'Toulouse',
     tel: '05 61 40 77 73',
     drive: true,
-    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/mirail-universite/boum-burger',
+    // ── 2026-05-18 : audit Deliveroo
+    //    Listing officiel = « Boum Burger — Saint-Simon », slug
+    //    `reynerie/boum-burger` (vérifié via résultats Google indexés).
+    //    L'ancien slug `mirail-universite/boum-burger` ne résolvait pas.
+    deliverooUrl: 'https://deliveroo.fr/fr/menu/toulouse/reynerie/boum-burger',
     coords: [43.5607, 1.4012],
   },
   {

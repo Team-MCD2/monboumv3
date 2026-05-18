@@ -35,8 +35,9 @@ const dialogId = id ?? `carte-${slug}`;
 const enseigne = data?.enseigne ?? slug;
 const boards = data?.boards ?? [];
 const items = data?.items ?? [];
+const categories = data?.categories ?? []; // text-only fallback (Saveurs)
 const note = data?.note;
-const hasContent = boards.length > 0 || items.length > 0;
+const hasContent = boards.length > 0 || items.length > 0 || categories.length > 0;
 ---
 
 <section class="bg-noir-deep py-20 md:py-28 relative overflow-hidden">
@@ -65,10 +66,16 @@ const hasContent = boards.length > 0 || items.length > 0;
         {enseigne}<br />
         <span class="text-rouge">à la carte.</span>
       </h2>
-      {hasContent && (
+      {(boards.length > 0 || items.length > 0) && (
         <p class="font-body text-base text-white/60 mt-6 max-w-xl mx-auto">
           Cliquez sur une carte pour la voir en grand. Sélection complète
           en restaurant ou sur Deliveroo.
+        </p>
+      )}
+      {boards.length === 0 && items.length === 0 && categories.length > 0 && (
+        <p class="font-body text-base text-white/60 mt-6 max-w-xl mx-auto">
+          Aperçu des catégories disponibles. Carte complète et tarifs à jour
+          sur Deliveroo.
         </p>
       )}
     </div>
@@ -144,16 +151,30 @@ const hasContent = boards.length > 0 || items.length > 0;
       </div>
     )}
 
-    {/* Item grid */}
+    {/* ─────────────────────────────────────────────────────────────
+       Item grid — each photo is a button that opens the same lightbox
+       as the menu boards. The dense product photos (Tacos XXL, Pizza
+       Signature, Le Bucket, Chicken Burger, Rice Bowl) need to be
+       readable when zoomed.
+       ───────────────────────────────────────────────────────────── */}
     {items.length > 0 && (
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {items.map((it, i) => (
           <article
-            class="group relative overflow-hidden bg-noir border border-white/10"
+            class="group relative overflow-hidden bg-noir border border-white/10 hover:border-rouge transition-colors duration-300"
             data-reveal
             data-d={String((i % 3) + 1)}
           >
-            <div class="aspect-[4/3] overflow-hidden bg-noir">
+            <button
+              type="button"
+              data-board
+              data-src={it.image}
+              data-alt={`${it.name} — ${it.description}`}
+              data-target={dialogId}
+              class="relative block w-full aspect-[4/3] overflow-hidden bg-noir text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-rouge focus-visible:ring-offset-2 focus-visible:ring-offset-noir-deep cursor-zoom-in"
+              aria-label={`Voir en grand : ${it.name}`}
+              style="cursor: zoom-in;"
+            >
               <img
                 src={it.image}
                 alt={it.name}
@@ -163,7 +184,30 @@ const hasContent = boards.length > 0 || items.length > 0;
                 loading="lazy"
                 decoding="async"
               />
-            </div>
+              {/* Hover overlay with magnifier — same vocabulary as the boards above */}
+              <div
+                class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-rouge/85 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"
+                aria-hidden="true"
+              >
+                <svg
+                  class="w-10 h-10 text-white drop-shadow-lg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  <line x1="11" y1="8" x2="11" y2="14" />
+                  <line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+                <span class="font-display uppercase text-white text-sm tracking-wider">
+                  Cliquez pour agrandir
+                </span>
+              </div>
+            </button>
             <div class="p-6">
               <p class="font-body text-[10px] text-rouge uppercase tracking-[0.25em] mb-2">
                 {it.category}
@@ -176,6 +220,33 @@ const hasContent = boards.length > 0 || items.length > 0;
               </p>
             </div>
           </article>
+        ))}
+      </div>
+    )}
+
+    {/* ─────────────────────────────────────────────────────────────
+       Text-only categories grid (Saveurs case) — used when no board
+       scans nor product photos exist yet. Names + 1-line teasers
+       sourced from the Deliveroo listing (no prices).
+       ───────────────────────────────────────────────────────────── */}
+    {boards.length === 0 && items.length === 0 && categories.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
+        {categories.map((cat, i) => (
+          <div
+            class="bg-noir border border-white/10 hover:border-rouge transition-colors duration-300 p-6 md:p-7"
+            data-reveal
+            data-d={String((i % 3) + 1)}
+          >
+            <p class="font-body text-[10px] text-rouge uppercase tracking-[0.25em] mb-2">
+              Catégorie
+            </p>
+            <h3 class="font-display text-2xl md:text-3xl text-white uppercase leading-none mb-3">
+              {cat.name}
+            </h3>
+            <p class="font-body text-sm text-white/60 leading-relaxed">
+              {cat.teaser}
+            </p>
+          </div>
         ))}
       </div>
     )}

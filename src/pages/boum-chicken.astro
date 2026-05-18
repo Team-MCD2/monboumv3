@@ -51,6 +51,7 @@ const description =
           <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-6 max-w-lg">
             Poulet halal à Toulouse — <strong class="text-white">ouvert 7j/7</strong>,
             et jusqu'à <strong class="text-white">1h45 le week-end</strong>.
+            Buckets, burgers, bowls — avec <strong class="text-white">drive</strong>.
           </p>
 
           <div class="rise-4 mt-8 flex flex-wrap gap-4">
@@ -92,27 +93,42 @@ const description =
   <GrungeSeparator fromDark={true} />
 
   {/* ═══════════════ CONCEPT + HOURS ═══════════════ */}
-  <section class="bg-white py-20 md:py-28">
+  {/* Densification : eyebrow factuel "Vauquelin · 7j/7", concept body     */}
+  {/* 2→3 paragraphes (anchor late-night / carte items / drive+halal).    */}
+  <section id="concept" class="bg-white py-20 md:py-28 scroll-mt-24">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div data-reveal>
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Notre concept
+            Vauquelin · 7j/7
           </p>
           <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6">
             Le <span class="text-rouge">poulet</span><br />
             après minuit.
           </h2>
-          <div class="space-y-4 font-body text-noir/70">
-            <p>
-              <strong>Buckets, wings, burgers au poulet</strong> — tout ce qui fait
-              craquer, en version <strong>halal</strong>.
-            </p>
-            <p>
-              Horaires étendus, <strong>drive</strong> disponible,
-              l'adresse de référence pour un chicken nocturne à Toulouse.
-            </p>
-          </div>
+
+          {/* Para 1 — anchor : 1 adresse, 7j/7, late-night */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            Boum Chicken c'est <strong>UNE adresse</strong> à Toulouse :
+            Vauquelin. Mais quelle adresse — ouverte
+            <strong> 7j/7 de 11h à 23h</strong>, et
+            <strong class="text-rouge"> jusqu'à 1h45 le vendredi et samedi</strong>.
+            Le repaire des dîners tardifs.
+          </p>
+
+          {/* Para 2 — carte highlights, derived from menus.js */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            Au menu : le <strong>Bucket</strong> à partager (partage non
+            garanti), le <strong>Chicken Burger</strong> à la galette
+            croustillante, le <strong>Rice Bowl</strong> pour les diètes pas
+            trop sérieuses. Plus un menu enfant pour les héritiers.
+          </p>
+
+          {/* Para 3 — drive + halal */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed">
+            <strong>Drive disponible</strong>, ou commande Deliveroo livrée
+            chez vous. Poulet halal certifié, sauces maison.
+          </p>
         </div>
 
         <div class="space-y-3" data-reveal data-d="2">

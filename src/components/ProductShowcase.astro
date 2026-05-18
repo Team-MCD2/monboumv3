@@ -4,23 +4,28 @@
 //
 // "Vraiement mettre en avant les produits - regarder burgerking"
 //
-// Six signature products as a hero food-photography grid. Drawn
-// from the Pass C scrape (public/assets/products/), curated to
-// represent each enseigne (5 burgers from Boum Burger NYC line +
-// pizza + chicken bucket + tacos).
+// IMAGE AUDIT (2026-05-18) — the original 6-card grid mixed clean
+// hero food photography (5 NYC burgers) with 3 scanned menu boards
+// (Boum Chicken bucket / Boum Pizz's carte / Boum Saveurs assiettes)
+// whose images had consumer-facing prices baked in (19,90€, 8,50€,
+// etc.) — direct violation of boss feedback "ne pas avoir le prix
+// sur les photos pour mettre en avant les produits". Until the
+// three other enseignes get clean hero photography (PHOTO_TODO),
+// the grid is restricted to the 5 NYC burger close-ups — all
+// professional, all price-free, all 4:3-friendly.
 //
 // Design language: bg-noir, oversized food photo, Anton uppercase
 // product name, rouge enseigne label, hover scale + border accent.
 // Inspired by Burger King's product-led hero (boss reference) and
 // pointb-officiel.com's "à la carte!" pattern.
 //
-// See .project-store/decisions.md ADR-006 (product photo source)
-// and ADR-008 (reference contextualisation).
+// See .project-store/decisions.md ADR-006 (product photo source),
+// ADR-008 (reference contextualisation), log.md 2026-05-18 entry.
 // ═══════════════════════════════════════════════════════════════
 
-// Six signature products — one per enseigne minimum, BB weighted (it's the
-// historical core + 4 restos out of 10). Names & taglines aligned with
-// src/data/menus.js where applicable (single source of truth for the carte).
+// PHOTO_TODO — once Boum Chicken / Boum Pizz's / Boum Saveurs have
+// clean hero shots (no prices, no menu-board scans), expand back to
+// a cross-enseigne 6-card grid and refresh the subtitle copy.
 const products = [
   {
     name: 'Wall Street',
@@ -44,25 +49,18 @@ const products = [
     href: '/boum-burger',
   },
   {
-    name: 'Le Bucket',
-    enseigne: 'Boum Chicken',
-    tagline: 'Le poulet \u00e0 partager \u2014 partage non garanti.',
-    image: '/assets/products/boum-chicken-bucket.jpg',
-    href: '/boum-chicken',
+    name: 'Peppertoast',
+    enseigne: 'Boum Burger',
+    tagline: 'Du poivre, du fondant, du caract\u00e8re.',
+    image: '/assets/products/burger-peppertoast.jpg',
+    href: '/boum-burger',
   },
   {
-    name: 'Pizza Signature',
-    enseigne: "Boum Pizz\u2019s",
-    tagline: 'P\u00e2te artisanale, garniture g\u00e9n\u00e9reuse, mozzarella fil-fil.',
-    image: '/assets/products/boum-pizza-bb.jpg',
-    href: '/boum-pizzs',
-  },
-  {
-    name: 'L\u2019Assiette',
-    enseigne: 'Boum Saveurs',
-    tagline: 'Kebab maison, riz parfum\u00e9, le combo qui rentre.',
-    image: '/assets/products/boum-assiettes.jpg',
-    href: '/boum-saveurs',
+    name: 'New Jersey',
+    enseigne: 'Boum Burger',
+    tagline: 'Le double-galette qui en redemande.',
+    image: '/assets/products/burger-new-jersey.jpg',
+    href: '/boum-burger',
   },
 ];
 ---
@@ -94,14 +92,17 @@ const products = [
         l&rsquo;envie.
       </h2>
       <p class="font-body text-base text-white/60 mt-6 max-w-xl mx-auto">
-        Six produits, quatre enseignes, une famille.
-        Voir la carte, ou commander direct.
+        Cinq burgers sign&eacute;s New York &mdash; la collection
+        signature Boum Burger. Pizz&rsquo;s, Chicken, Saveurs : voir
+        leurs cartes d&eacute;di&eacute;es.
       </p>
     </div>
 
-    {/* Grid */}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-      {products.map((p, i) => (
+    {/* Grid : 5 items → split into 3 + 2 centered row to avoid the orphan-  */}
+    {/* row asymmetry that `grid-cols-3` would otherwise produce. Same       */}
+    {/* card markup, only the row container differs.                        */}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-6 md:mb-8">
+      {products.slice(0, 3).map((p, i) => (
         <a
           href={p.href}
           class="group relative block overflow-hidden bg-noir border border-white/10 hover:border-rouge transition-all duration-300 shine-card hover-lift arrow-cta"
@@ -130,7 +131,46 @@ const products = [
               {p.tagline}
             </p>
           </div>
-          {/* Hover badge — top-right, always-visible scale up on hover */}
+          <span
+            class="absolute top-4 right-4 bg-rouge text-white font-display uppercase text-xs px-3 py-1.5 shadow-lg flex items-center gap-1 transform transition-transform duration-300 group-hover:scale-110"
+            aria-hidden="true"
+          >
+            Voir <span data-arrow>→</span>
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto">
+      {products.slice(3).map((p, i) => (
+        <a
+          href={p.href}
+          class="group relative block overflow-hidden bg-noir border border-white/10 hover:border-rouge transition-all duration-300 shine-card hover-lift arrow-cta"
+          data-reveal
+          data-d={String((i % 3) + 1)}
+        >
+          <div class="aspect-[4/3] overflow-hidden bg-noir">
+            <img
+              src={p.image}
+              alt={`${p.name} — ${p.enseigne}`}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+              width="1200"
+              height="900"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="p-6 md:p-7">
+            <p class="font-body text-[10px] text-rouge uppercase tracking-[0.25em] mb-2">
+              {p.enseigne}
+            </p>
+            <h3 class="font-display text-2xl md:text-3xl text-white uppercase leading-none mb-3 group-hover:text-rouge transition-colors">
+              {p.name}
+            </h3>
+            <p class="font-body text-sm text-white/60 leading-relaxed">
+              {p.tagline}
+            </p>
+          </div>
           <span
             class="absolute top-4 right-4 bg-rouge text-white font-display uppercase text-xs px-3 py-1.5 shadow-lg flex items-center gap-1 transform transition-transform duration-300 group-hover:scale-110"
             aria-hidden="true"

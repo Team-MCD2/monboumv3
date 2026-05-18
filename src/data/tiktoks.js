@@ -20,6 +20,7 @@ import generated from '../generated/tiktok-local.json' with { type: 'json' };
  * @property {string} title - French caption / display label
  * @property {string} account - TikTok handle (without @)
  * @property {string} [url] - Optional public TikTok URL
+ * @property {number} [view_count] - Optional pass-through view count for stat surfaces
  */
 
 export const TIKTOK_ACCOUNT = 'boumchickentoulouse';
@@ -66,6 +67,7 @@ const fromGenerated = (generated?.items || [])
     title: TITLE_OVERRIDES[item.id] || cleanTitle(item.title),
     account: TIKTOK_ACCOUNT,
     url: item.url,
+    view_count: item.view_count,
   }));
 
 /** @type {TikTok[]} */
@@ -73,3 +75,14 @@ export const TIKTOKS = fromGenerated.length > 0 ? fromGenerated : FALLBACK_TIKTO
 
 /** Optional external TikTok URL for attribution / fallback */
 export const tiktokUrl = (entry) => entry.url || `https://www.tiktok.com/@${entry.account}`;
+
+/**
+ * Sum of view_counts across all TIKTOKS that carry the data.
+ * Used by the home Section 8 to surface a credible "+XK vues" stat
+ * without hardcoding numbers (auto-refreshes on next `npm run sync:tiktok`).
+ * Current data (2026-04-28): 191900 + 180200 + 144500 = 516600.
+ */
+export const TOTAL_TIKTOK_VIEWS = TIKTOKS.reduce(
+  (sum, t) => sum + (t.view_count || 0),
+  0,
+);

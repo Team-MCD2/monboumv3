@@ -17,9 +17,9 @@ const locations = byEnseigne('boum-pizzs');
 
 const schema = buildEnseigneGraph('boum-pizzs', Astro.site?.toString() || 'https://mon-boum.vercel.app');
 
-const title = `${enseigne.nom} Toulouse — Pizza & Tacos Halal | Mon Boum`;
+const title = `${enseigne.nom} Toulouse — Pizza Géante, Tacos & Krousty Halal | Mon Boum`;
 const description =
-  "Boum Pizz's : pizzas artisanales et tacos halal à Toulouse. 4 restaurants dans la métropole — commandez en livraison ou venez sur place.";
+  "Boum Pizz's : pizzas artisanales (la Géante vue 180K fois sur TikTok), tacos, Krousty halal à Toulouse. 4 restaurants dans la métropole — livraison ou sur place.";
 ---
 
 <Layout title={title} description={description} schema={schema}>
@@ -54,8 +54,12 @@ const description =
             <span class="text-rouge">PIZZ'S.</span>
           </h1>
           <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-6 max-w-lg">
-            Pizzas artisanales et tacos <strong class="text-white">halal</strong>,
-            cuisinés avec passion dans nos 4 restaurants toulousains.
+            <strong class="text-white">Pizzas artisanales</strong> à la pâte
+            fine — dont la Géante vue
+            <strong class="text-rouge"> 180K fois sur TikTok</strong>. Plus les
+            <strong class="text-white"> tacos</strong> et le
+            <strong class="text-white"> Krousty</strong>, dans
+            {' '}{locations.length} restos halal.
           </p>
 
           <div class="rise-4 mt-8 flex flex-wrap gap-4">
@@ -95,43 +99,65 @@ const description =
   <GrungeSeparator fromDark={true} />
 
   {/* ═══════════════ CONCEPT ═══════════════ */}
+  {/* Densification : 2 paragraphes → 3 (Géante TikTok / variantes / */}
+  {/* Krousty Rangueil). Stats grid enrichi (adresses / Géante 180K / */}
+  {/* variantes / Krousty). Eyebrow factuel "Toulouse · 4 restos".   */}
   <section id="concept" class="bg-white py-20 md:py-28 scroll-mt-24">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div data-reveal>
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Notre concept
+            Toulouse · {locations.length} restos
           </p>
           <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6">
-            Pizza <span class="text-rouge">&</span><br />
-            tacos halal.
+            Pizza <span class="text-rouge">géante</span>,<br />
+            tacos & Krousty.
           </h2>
-          <div class="space-y-4 font-body text-noir/70">
-            <p>
-              Des <strong>pizzas artisanales</strong> à la pâte fine, généreusement
-              garnies, et des <strong>tacos halal</strong> ultra-gourmands.
-            </p>
-            <p>
-              Parfait en livraison ou sur place — 4 adresses dans la région
-              toulousaine pour se régaler.
-            </p>
-          </div>
+
+          {/* Para 1 — TikTok virality + claim signature */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            La <strong>Pizza Géante</strong>, c'est la star :
+            <strong class="text-rouge"> 180K vues sur TikTok</strong> et
+            toujours plus de gens qui veulent voir ça en vrai. Pâte artisanale,
+            garniture généreuse, mozzarella fil-fil — taillée pour partager
+            (ou pas).
+          </p>
+
+          {/* Para 2 — variantes de carte */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            En plus de la Géante : <strong>Senior, Junior</strong>, et les
+            spéciales <strong>Soso</strong> et <strong>Tunisienne</strong>
+            (ces deux dernières uniquement à Bellefontaine, Aucamville et
+            Rangueil). Côté salé non-pizza, on a les <strong>tacos</strong>
+            et le <strong>Krousty</strong>.
+          </p>
+
+          {/* Para 3 — Rangueil specialty + halal */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed">
+            <strong>{locations.length} restos</strong> entre Toulouse et
+            l'agglo. Le Krousty,
+            <strong> c'est la spécialité de Rangueil</strong>. Tout est halal,
+            tout est cuisiné sur place.
+          </p>
         </div>
 
+        {/* Stats grid 2×2 — claims sourced from restaurants.js + tiktoks.js */}
         <div class="grid grid-cols-2 gap-4" data-reveal data-d="2">
-          <div class="bg-gris p-6 text-center col-span-2">
-            <p class="font-display text-4xl text-rouge mb-1">{locations.length} adresses</p>
-            <p class="font-body text-xs uppercase tracking-wider text-noir/60">
-              à Toulouse et métropole
-            </p>
+          <div class="bg-gris p-6 text-center">
+            <p class="font-display text-4xl text-rouge mb-1">{locations.length}</p>
+            <p class="font-body text-xs uppercase tracking-wider text-noir/60">Adresses</p>
+          </div>
+          <div class="bg-noir text-white p-6 text-center">
+            <p class="font-display text-4xl text-rouge mb-1">180K</p>
+            <p class="font-body text-xs uppercase tracking-wider text-white/60">Vues TikTok · Géante</p>
           </div>
           <div class="bg-noir text-white p-6 text-center">
             <p class="font-display text-3xl text-rouge mb-1">Pizza</p>
-            <p class="font-body text-xs uppercase tracking-wider text-white/60">Artisanale</p>
+            <p class="font-body text-xs uppercase tracking-wider text-white/60">Senior · Junior · Géante</p>
           </div>
-          <div class="bg-noir text-white p-6 text-center">
-            <p class="font-display text-3xl text-rouge mb-1">Tacos</p>
-            <p class="font-body text-xs uppercase tracking-wider text-white/60">Halal</p>
+          <div class="bg-gris p-6 text-center">
+            <p class="font-display text-3xl text-rouge mb-1">Krousty</p>
+            <p class="font-body text-xs uppercase tracking-wider text-noir/60">Spécialité Rangueil</p>
           </div>
         </div>
       </div>

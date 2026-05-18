@@ -103,6 +103,9 @@ const faqJsonLd = faq.length > 0 ? {
         </script>
       </>
     )}
+
+    {/* Page-specific <head> injection (preload hints, etc.) */}
+    <slot name="head" />
   </head>
 
   <body>

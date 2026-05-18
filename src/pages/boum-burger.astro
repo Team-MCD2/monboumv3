@@ -14,12 +14,13 @@ import {
 
 const enseigne = ENSEIGNES['boum-burger'];
 const locations = byEnseigne('boum-burger');
+const drives = locations.filter((l) => l.drive).length;
 
 const schema = buildEnseigneGraph('boum-burger', Astro.site?.toString() || 'https://mon-boum.vercel.app');
 
 const title = `${enseigne.nom} Toulouse — Burger Halal Depuis 2004 | Mon Boum`;
 const description =
-  'Boum Burger : le 1er drive Fast-Food halal de France depuis 2004. Découvrez nos burgers halal dans nos 4 restaurants à Toulouse.';
+  'Boum Burger : le 1er drive Fast-Food halal de France depuis 2004. Cinq burgers signés New York — Wall Street, Brooklyn, 5e Avenue, Peppertoast, New Jersey — dans nos 4 restaurants à Toulouse.';
 ---
 
 <Layout title={title} description={description} schema={schema}>
@@ -55,7 +56,9 @@ const description =
           </h1>
           <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-6 max-w-lg">
             Le <strong class="text-white">1er drive Fast-Food halal de France</strong>,
-            depuis <strong class="text-white">2004</strong>.
+            depuis <strong class="text-white">2004</strong>. Cinq burgers signés
+            New York — Wall Street, Brooklyn, 5e Avenue — servis dans
+            <strong class="text-white"> {locations.length} restaurants</strong>.
           </p>
 
           <div class="rise-4 mt-8 flex flex-wrap gap-4">
@@ -95,46 +98,62 @@ const description =
   <GrungeSeparator fromDark={true} />
 
   {/* ═══════════════ CONCEPT ═══════════════ */}
+  {/* Densification : 1 line "smash burger" → 3 paragraphs (origine /     */}
+  {/* NYC theme / qualité+livraison). Stats grid 2×2 cohérent (2004 /     */}
+  {/* restos / drives / signature). Derived from restaurants.js + menus.js*/}
   <section id="concept" class="bg-white py-20 md:py-28 scroll-mt-24">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div data-reveal>
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Notre concept
+            Toulouse · 2004
           </p>
           <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-6">
-            Le <span class="text-rouge">smash burger</span><br />
-            qui a tout changé.
+            Cinq burgers,<br />
+            <span class="text-rouge">cinq quartiers</span> de NYC.
           </h2>
-          <div class="space-y-4 font-body text-noir/70">
-            <p>
-              Depuis 2004, Boum Burger met la <strong>qualité halal</strong> au
-              cœur du Street-Food toulousain. Viandes certifiées, pains artisanaux,
-              sauces maison.
-            </p>
-            <p>
-              4 restaurants, dont <strong>3 avec drive</strong>, pour vous
-              servir le meilleur burger halal de la région toulousaine.
-            </p>
-          </div>
+
+          {/* Para 1 — origine + drive halal France */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            Tout commence en <strong>2004</strong> à Toulouse. Une équipe d'ici
+            décide de monter le <strong class="text-rouge">1er fast-food halal
+            en mode drive de France</strong>. Vingt ans plus tard, on est
+            toujours là.
+          </p>
+
+          {/* Para 2 — NYC theme + signature burgers (sourced menus.js) */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed mb-4">
+            <strong>Cinq burgers, cinq quartiers</strong> : Wall Street,
+            Brooklyn, 5e Avenue, Peppertoast, New Jersey. Chacun sa
+            personnalité, tous taillés pour les vraies faims. Plus le
+            <strong> Tacos XXL</strong> pour ceux qui choisissent pas.
+          </p>
+
+          {/* Para 3 — qualité + modes */}
+          <p class="font-body text-base md:text-lg text-noir/75 leading-relaxed">
+            Viandes halal certifiées, pains artisanaux, sauces maison.
+            <strong> Sur place, en drive, en livraison</strong> — dans nos
+            {' '}{locations.length} restos toulousains.
+          </p>
         </div>
 
+        {/* Stats grid 2×2 — derived counts */}
         <div class="grid grid-cols-2 gap-4" data-reveal data-d="2">
+          <div class="bg-gris p-6 text-center">
+            <p class="font-display text-4xl text-rouge mb-1">2004</p>
+            <p class="font-body text-xs uppercase tracking-wider text-noir/60">Depuis</p>
+          </div>
           <div class="bg-gris p-6 text-center">
             <p class="font-display text-4xl text-rouge mb-1">{locations.length}</p>
             <p class="font-body text-xs uppercase tracking-wider text-noir/60">Restaurants</p>
           </div>
           <div class="bg-gris p-6 text-center">
-            <p class="font-display text-4xl text-rouge mb-1">
-              {locations.filter((l) => l.drive).length}
-            </p>
+            <p class="font-display text-4xl text-rouge mb-1">{drives}</p>
             <p class="font-body text-xs uppercase tracking-wider text-noir/60">Drives</p>
           </div>
-          <div class="bg-gris p-6 text-center col-span-2">
-            <p class="font-display text-4xl text-rouge mb-1">Depuis 2004</p>
-            <p class="font-body text-xs uppercase tracking-wider text-noir/60">
-              1er drive halal de France
-            </p>
+          <div class="bg-noir text-white p-6 text-center">
+            <p class="font-display text-4xl text-rouge mb-1">5</p>
+            <p class="font-body text-xs uppercase tracking-wider text-white/60">Burgers NYC</p>
           </div>
         </div>
       </div>

@@ -42,6 +42,21 @@ const ETAPES = [
 ---
 
 <Layout title={title} description={description}>
+  {/* ─────────────────────────────────────────────────────────────
+     Eager-preload the 44 MB franchise video so it's already buffered
+     by the time the user scrolls down to the "La Boum Team" section.
+     Combined with <video preload="auto"> below, this guarantees the
+     video plays instantly without a loading spinner, however fast the
+     user scrolls.
+     ───────────────────────────────────────────────────────────── */}
+  <link
+    slot="head"
+    rel="preload"
+    as="video"
+    href="/assets/videos/Boum-Franchise.mp4"
+    type="video/mp4"
+  />
+
   {/* ═══════════════ HERO ═══════════════ */}
   <section
     class="relative texture-bg overflow-hidden"
@@ -85,10 +100,17 @@ const ETAPES = [
         </h2>
       </div>
 
+      {/* ─────────────────────────────────────────────────────────────
+         Video preload : `preload="auto"` + explicit <link rel="preload"> in
+         <head> ensures the 44 MB MP4 is fetched as soon as the page loads,
+         so by the time the user scrolls down (a few seconds later) the
+         video is already buffered and plays instantly without spinner.
+         ───────────────────────────────────────────────────────────── */}
       <div class="relative max-w-4xl mx-auto" data-reveal data-d="2">
         <video
           controls
-          preload="metadata"
+          preload="auto"
+          playsinline
           poster="/assets/banners/Boums.png"
           class="w-full h-auto rounded-lg shadow-2xl"
         >

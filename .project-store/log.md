@@ -338,3 +338,255 @@
   - Phase E manual QA (mobile drawer X, Lighthouse on Vercel
     preview) remains owed as before.
   - db.md : append `D-2026-05-05` line to M09 covering Phase G.
+
+## D-2026-05-18  Editorial densification pass (home 1-8 + 4 brand pages)
+
+- **context**     : owner asked for an "expert / world-class refurbish"
+                    of every section. Workflow agreed : home sections 1
+                    through 8 first, then the 4 enseigne pages, then the
+                    rest of the site, with build verification at every
+                    step. No layout overhaul — only editorial + data
+                    cohesion + cross-section visual rhythm. Single
+                    constraint : no fabricated stats; every number must
+                    trace back to `restaurants.js`, `menus.js`,
+                    `promos.js`, `testimonials.js`, or
+                    `generated/tiktok-local.json`.
+- **actions**     :
+  - **Home section 1 — Hero**
+    - `HeroRotator.jsx` : per-slide eyebrow, per-slide `wrapperClass`
+      (slide 2 phone capped + rotate 4deg to stop hero stretch),
+      `boum-drive-lifestyle.jpg` for slide 3 with the new "1er drive
+      halal de France" claim, 7-second rotation cadence, image column
+      capped `max-h-[55vh] lg:max-h-[60vh]`, CTAs gain `pulse-rouge`
+      + `arrow-cta`.
+    - `index.astro` hero wrapper : `min-height: calc(100dvh - 40px)`
+      with `100vh` fallback for iOS-Safari url-bar safety. Marquee
+      content varied (4 distinct phrases vs the previous mono-string).
+  - **Home section 2 — Bienvenue**
+    - 1 sentence body → 3 paragraphs (origine 2004 + 4 enseignes +
+      promesse halal/livré). Inline 3-stat band (2004 · 10 · 1er).
+      Dual-CTA (Mon Boum c'est quoi + Voir nos 10 restos).
+  - **Home section 3 — Faites votre choix**
+    - Eyebrow "Nos enseignes" → "4 enseignes · 1 famille".
+    - Cards consume new `enseigneCards` derivation (count + drives
+      meta line) and `SIGNATURES` constant (top-3 named dishes per
+      enseigne, sourced from `menus.js` + TikTok top-views). Each
+      card now shows meta + signatures + "Voir la carte →" affordance.
+  - **Home section 3.5 — ProductShowcase**
+    - `Tacos XXL` (BB-heavy weight) → `L'Assiette` Boum Saveurs so
+      all 4 enseignes are represented. `Pizza BB` renamed to
+      `Pizza Signature` to align with `menus.js` (single source of
+      truth). Subtitle tightened (Six produits · quatre enseignes ·
+      une famille).
+  - **Home section 4 — Qualité**
+    - Eyebrow "Notre engagement" → "Halal · Frais · Maison" (echo
+      of the Section 1 marquee). 4 bullets transformed from generic
+      strings into {Anton title + 1-line spec} pairs. Intro
+      paragraph added before the list ("Depuis 2004 une seule
+      règle…"). Code comment flags the cross-brand
+      `BOUM-BURGER-SINCE.png` reuse with `banner-2.png` as a swap
+      candidate pending visual approval.
+  - **Home section 5 — Livraison**
+    - Intro paragraph + 3 info-pills (Livré 7j/7 · 30 min en moyenne
+      · Toulouse + agglo). Single-CTA → dual-CTA (Deliveroo primary
+      + "Drive ou sur place" secondary to `/nos-restaurants`).
+  - **Home section 6 — Promos**
+    - H2 "Nos promos." (8 chars, lonely) → 2-line "Les deals / qui
+      régalent." Body realigned to actual data (mentioned "burger
+      offert" which doesn't exist in `promos.js`). Count derived
+      from `PROMOS.length` so adding/removing a promo updates the
+      copy automatically.
+  - **Home section 7 — Témoignages**
+    - H2 "Validé." → "Validé. / Et pas qu'un peu." Body realigned
+      to real data : the 11 testimonials are scraped celebrity
+      quotes from monboum.fr (Ninho, Dadju, Big Flo & Oli, Vegedream,
+      Koba LaD, L'Algerino, Marwa Loud, Tayc, Chily, Mario, Landy),
+      NOT "milliers d'avis Boum Team" as the previous copy
+      implied. `TestimonialsSlider.jsx` duplicate eyebrow removed
+      (section header already says "Ils nous ont / Validé").
+      `TESTIMONIALS.length` consumed for the "11 artistes" count.
+  - **Home section 8 — TikToks**
+    - H2 "Réseaux sociaux." (plural, drift — only TikTok is shown)
+      → "On poste. / Vous likez." Body anchors on the real stat :
+      sum of `view_count` from `tiktok-local.json` rounded down to
+      the nearest 100K bucket ("500K+ vues" today, auto-updates
+      after next `npm run sync:tiktok`). Added `view_count`
+      passthrough and `TOTAL_TIKTOK_VIEWS` export in `tiktoks.js`.
+  - **Brand pages — 4 enseigne refurbs**
+    - `/boum-burger` : hero body adds NYC theme + count derived from
+      `byEnseigne('boum-burger').length`. Concept 2 → 3 paragraphs
+      (origine 2004 / 5 NYC burgers / qualité+modes). Stats grid
+      reorganised into a 2×2 with derived counts (2004 · 4 · 3 · 5
+      burgers NYC). Title + description updated.
+    - `/boum-chicken` : hero body adds "Buckets, burgers, bowls" +
+      drive mention. Eyebrow concept "Notre concept" → "Vauquelin
+      · 7j/7" (factuel). Concept 2 → 3 paragraphs (anchor late-
+      night / carte items from `menus.js` / drive+halal).
+      `id="concept"` + `scroll-mt-24` added for anchor parity with
+      the other brand pages.
+    - `/boum-pizzs` : hero body anchors on the Pizza Géante's
+      TikTok 180K views + Krousty Rangueil mention. Concept 2 → 3
+      paragraphs (Géante / variantes Soso/Tunisienne with their
+      restriction note from `restaurants.js` / Krousty as Rangueil
+      specialty). Stats grid 2×2 (adresses · 180K vues TikTok ·
+      Pizza variants · Krousty Rangueil). Title + description rich.
+    - `/boum-saveurs` : the strongest content angle (Naan Kebab
+      TikTok #1 191K + Box du peuple TikTok #3 144K). Hero body
+      lean on the Naan Kebab claim. Concept eyebrow "Notre concept"
+      → "Mermoz · Naan Kebab". H2 "L'authenticité / du Street-Food."
+      (generic) → "Le naan kebab / qui défonce TikTok." 3 paragraphs
+      grounded on the actual TikTok descriptions. Stats grid : 191K
+      Naan Kebab #1 · 144K Box du peuple #3 · 100% halal.
+  - **Meta cleanups**
+    - `index.astro` top comment "7 sections" → "8 sections" (Phase D
+      ProductShowcase added 2026-05-04 but comment never refreshed).
+    - `docs/ROADMAP.md` gains a LEGACY banner pointing to
+      `.project-store/roadmap.md` as the canonical source (M08).
+  - **Image audit — critical findings (session 2, 2026-05-18 PM)**
+    - **L'Assiette / Le Bucket / Pizza Signature** in
+      `ProductShowcase` referenced scanned menu boards whose images
+      had baked-in consumer prices (19,90€, 8,50€, 6,90€, etc.).
+      Direct violation of boss feedback 2026-05-04 "ne pas avoir le
+      prix sur les photos". `ProductShowcase` reduced from a 6-card
+      cross-enseigne grid to a 5-card "NYC burger collection"
+      (Wall Street, Brooklyn, 5e Avenue, Peppertoast, New Jersey
+      — all clean food photography). Grid split into 3+2 centered
+      rows to avoid orphan-row asymmetry. Subtitle changed from
+      "Six produits, quatre enseignes, une famille" to "Cinq
+      burgers signés New York — la collection signature Boum
+      Burger. Pizz's, Chicken, Saveurs : voir leurs cartes
+      dédiées." PHOTO_TODO comment flags the need for clean hero
+      photography of the other three enseignes before expanding
+      back to a 6-card cross-enseigne grid.
+    - **Hero slide 3** previously used
+      `public/assets/products/boum-drive-lifestyle.jpg` whose
+      filename suggests a lifestyle photo but whose content is a
+      scanned Boum Burger menu board with PRICES visible (7,50€ →
+      10€). Swapped to `burger-new-jersey.jpg` (cinematic
+      double-burger close-up, bokeh gold lighting, newspaper
+      backdrop). The `heroImages` array gains an explanatory
+      comment.
+    - **Section 4 Qualité** previously used
+      `BOUM-BURGER-SINCE.png`. The logo says "Depuis 2008" — but
+      the surrounding section claimed "Qualité Mon Boum depuis
+      2004". Year contradiction AND brand-scope contradiction
+      (Boum Burger logo on a transversal Mon Boum section).
+      Swapped to `burger-wallstreet.jpg` (the flagship hero
+      close-up). Alt changed to "Wall Street — burger signature
+      halal Mon Boum". Image gets `rounded-sm shadow-2xl` so it
+      reads as a photo card (vs the prior framed-illustration
+      treatment).
+    - **Year discrepancy discovered** : the four enseigne logos
+      bear different launch years — Boum Burger 2008, Boum
+      Pizz's 2015, Boum Chicken 2019, Boum Saveurs (no year on
+      logo). The site copy uniformly says "Mon Boum depuis
+      2004" (in `index.astro` Section 2, `mon-boum.astro`,
+      `boum-burger.astro`, `contact.astro`,
+      `formulaire-de-candidature.astro`, and a JSON-LD
+      `foundingDate`). Most plausible interpretation : "Mon Boum"
+      is the holding-company / group founded 2004, with each
+      enseigne launching as a sub-brand later. Flagged for boss
+      confirmation. No change made to the 2004 claim pending
+      confirmation.
+  - **Deliveroo URL audit (session 2)**
+    - User asked to cross-check the 10 per-restaurant Deliveroo
+      URLs against the legacy V2 codebase. V2 (`Monboumv2`) only
+      defined two URLs : a global redirect
+      (`https://monboum.commande.deliveroo.fr/fr/`) and a single
+      per-restaurant override for Rangueil. The V3 ten-URL set
+      therefore appears to have been added later (probably
+      hand-curated or scraped by Cascade in a previous session).
+      Action : keep the V3 URLs intact (they pre-date this
+      session), document them in the QA copy-paste table for
+      human verification on the live Deliveroo (Deliveroo blocks
+      automated checks). The
+      `boum-burger-mermoz → new-york-story` slug is the most
+      suspicious entry and should be checked first.
+  - **Remaining-pages refurbish (session 2)**
+    - `/mon-boum`, `/formulaire-de-candidature`,
+      `/mentions-legales`, `/404`, `/nos-restaurants` all
+      reviewed. The first four were already in good shape
+      (`TOTAL_RESTAURANTS` derived where applicable, voice OK,
+      legal copy intact, 404 has the brand-voice "Cette page a
+      fait boum") — no structural changes needed.
+    - `/contact.astro` had two hardcoded "10 adresses" strings.
+      Both replaced with `${TOTAL_RESTAURANTS}` via a new import
+      from `restaurants.js`, matching the pattern used everywhere
+      else in the codebase.
+    - `/nos-restaurants.astro` hero body listed "Toulouse,
+      Colomiers, Aucamville et Mermoz" as if all four were
+      cities. Mermoz is a Toulouse quartier and Aucamville is
+      borderline (postal code 31200 Toulouse but historically a
+      separate commune). Rewritten to "{TOTAL_RESTAURANTS}
+      adresses, de Toulouse à Colomiers. Filtrez par enseigne
+      ci-dessous, ou cliquez sur la carte." — derives the count,
+      drops the misleading quartier list, signposts the filter
+      affordance.
+- **learnings**   :
+  - **L-2026-05-18-MB-010** — when the consumer-facing copy and the
+    data file disagree (e.g. Section 6 body said "burger offert"
+    while `promos.js` has none), the copy is the bug, not the data.
+    Always cite from the single source of truth and let the count
+    auto-derive. Cross-project candidate.
+  - **L-2026-05-18-MB-011** — TikTok `view_count` is sticky stat
+    gold for the marketing surface. Surfacing it via a derived
+    constant + nearest-100K marketing rounding lets the headline
+    self-maintain across re-syncs without ever showing a number that
+    rolled backwards. Pattern : `Math.floor(total / 100000) * 100`
+    + `"{n}K+"` suffix. Cross-project candidate.
+  - **L-2026-05-18-MB-012** — `H2 ≤ 8 chars` at `text-5xl/6xl` reads
+    visually solitary against a hero band. Either pad with a
+    `<br/><span class="text-rouge">…</span>` continuation, or drop
+    to `text-4xl/5xl`. Both Section 6 ("Nos promos.") and
+    Section 7 ("Validé.") hit this; both fixed by line-2 expansion.
+  - **L-2026-05-18-MB-013** — never trust an asset filename. The
+    file `boum-drive-lifestyle.jpg` shipped as the home hero
+    slide 3 with the title "1er drive halal de France" — the
+    filename matched the intent — but the image contents were a
+    Boum Burger menu board with every price baked in (7,50€ →
+    10€). Always inspect an image visually before relying on its
+    semantic intent. Cross-project candidate (file-naming drift
+    is a universal anti-pattern in scrape-sourced asset libraries).
+  - **L-2026-05-18-MB-014** — boss-supplied logos can encode
+    structural facts. The four Mon Boum enseigne logos each bear
+    a different "Depuis YYYY" stamp (Boum Burger 2008, Boum Pizz's
+    2015, Boum Chicken 2019, Boum Saveurs none) which doesn't
+    match the marketing claim "Mon Boum depuis 2004". The
+    discrepancy is reconcilable (holding-company 2004 vs enseigne
+    launches later), but flags a category of bug that's invisible
+    until you look at the image content. Always cross-check
+    consumer-facing year/age claims against the logo files.
+    Cross-project candidate for any brand-system migration.
+- **next session**:
+  - **(boss)** Confirm the "Mon Boum depuis 2004" claim. The four
+    enseigne logos bear 2008/2015/2019 — likely the group was
+    founded 2004 and the first enseigne (Boum Burger) launched
+    2008. If 2004 is wrong, the JSON-LD `foundingDate`, every
+    page hero, and three brand pages will need a sweep.
+  - **(boss)** Commission clean hero food photography for the
+    three other enseignes (Boum Chicken, Boum Pizz's, Boum
+    Saveurs). All current "product" photos for these three are
+    scanned menu boards with prices baked in — unusable on the
+    marketing surface. Once shot, restore `ProductShowcase` to
+    its 6-card cross-enseigne grid (the PHOTO_TODO marker is
+    inside `src/components/ProductShowcase.astro`).
+  - **(human)** Verify the 10 Deliveroo URLs against live
+    Deliveroo. Priority entry : `boum-burger-mermoz` which
+    points at `.../patte-doie-la-cepiere/new-york-story` (slug
+    suggests legacy naming). Table provided in the session
+    recap.
+  - **(human)** Manual QA browser pass on the new copy (8 home
+    sections + 4 brand concepts + 5 other pages). Confirm no
+    broken layout, no stat regression, no copy overflow on
+    mobile. Watch the new ProductShowcase 3+2 row layout
+    specifically at the sm and lg breakpoints.
+  - **(human)** Run Lighthouse on `/`, `/boum-burger`,
+    `/boum-saveurs`, `/nos-restaurants` (commands ready in the
+    session recap).
+  - **(optional)** Decide if the now-orphan `banner-2.png` and
+    `BOUM-BURGER-SINCE.png` should be moved to
+    `public/assets/banners/_originals/` to avoid future
+    accidental reuse. The other "menu-board-as-product" files
+    (`boum-chicken-bucket.jpg` et al.) should stay where they
+    are — they're still consumed by `CarteSection` where the
+    price-board context is legitimate.

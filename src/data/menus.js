@@ -32,11 +32,20 @@
  */
 
 /**
+ * @typedef {Object} MenuCategory
+ * @property {string} name   — category label (e.g. "Naan Kebab")
+ * @property {string} teaser — short FR description, no price
+ */
+
+/**
  * @typedef {Object} MenuData
- * @property {string}      enseigne — display name
- * @property {MenuBoard[]} boards
- * @property {MenuItem[]}  items
- * @property {string=}     note     — optional caption / placeholder
+ * @property {string}          enseigne   — display name
+ * @property {MenuBoard[]}     boards
+ * @property {MenuItem[]}      items
+ * @property {MenuCategory[]=} categories — text-only fallback when no
+ *                                          board scans / product photos
+ *                                          exist yet (Boum Saveurs)
+ * @property {string=}         note       — optional caption / placeholder
  */
 
 /** @type {Record<string, MenuData>} */
@@ -183,9 +192,38 @@ export const MENUS = {
 
   'boum-saveurs': {
     enseigne: 'Boum Saveurs',
+    // ── Pas de menu-board scanné ni de photos studio pour Boum Saveurs
+    //    en mai 2026. Les catégories listées dans `categories` ci-dessous
+    //    proviennent de la fiche Deliveroo officielle :
+    //    https://deliveroo.fr/fr/menu/toulouse/patte-doie-la-cepiere/boum-saveurs
+    //    Sources confirmées : extraits SERP Google (mai 2026).
     boards: [],
     items: [],
-    note: 'La carte Boum Saveurs (kebab et naans halal) sera bientôt disponible en ligne. En attendant, retrouvez-nous sur Deliveroo pour passer commande directement.',
+    // Catégories textuelles affichées par CarteSection quand boards/items
+    // sont vides — voir CarteSection.astro pour le rendu.
+    categories: [
+      {
+        name: 'Naan Kebab',
+        teaser: 'Naan moelleux, viande kebab maison, salades, sauces — la star qui a fait 191K vues sur TikTok.',
+      },
+      {
+        name: 'Tacos',
+        teaser: '« Royaume des Tacos » sur Deliveroo : galettes XL, viandes au choix, sauces signature.',
+      },
+      {
+        name: 'Pizzas Saveurs du Monde',
+        teaser: 'Un voyage gustatif autour de la planète — saveurs internationales sur pâte artisanale.',
+      },
+      {
+        name: 'Box',
+        teaser: 'La Box du peuple : viandes, frites bien dorées, sauces, naan. 144K vues TikTok pour cette combinaison.',
+      },
+      {
+        name: 'Baguettes',
+        teaser: 'Baguette généreuse avec viande au choix, salade, tomate, oignon.',
+      },
+    ],
+    note: 'Photos studio à venir. En attendant, la carte complète et les prix sont à jour sur Deliveroo.',
   },
 };
 

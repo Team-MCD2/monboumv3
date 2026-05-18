@@ -2,7 +2,10 @@
 // ═══════════════════════════════════════════════════════════════
 // Home — Mon Boum V3
 // Spec: plan/plan.md Ordre d'Exécution 3 + sections 330-460
-// 7 sections + 4 React islands
+// 8 sections (Hero · Bienvenue · Faites votre choix · ProductShowcase
+// · Qualité · Livraison · Promos · Témoignages · TikToks) +
+// 4 React islands (HeroRotator · TestimonialsSlider · PromoScroller
+// · TikTokFacade). Phase D ProductShowcase added 2026-05-04.
 // ═══════════════════════════════════════════════════════════════
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
@@ -12,16 +15,26 @@ import TestimonialsSlider from '../components/islands/TestimonialsSlider.jsx';
 import PromoScroller from '../components/islands/PromoScroller.jsx';
 import TikTokFacade from '../components/islands/TikTokFacade.jsx';
 import { ENSEIGNES, byEnseigne, RESTAURANTS, buildRestaurantSchema } from '../data/restaurants.js';
-import { Image, getImage } from 'astro:assets';
+import { PROMOS } from '../data/promos.js';
+import { TESTIMONIALS } from '../data/testimonials.js';
+import { TIKTOKS, TOTAL_TIKTOK_VIEWS } from '../data/tiktoks.js';
+import { Image } from 'astro:assets';
 
-import sliderImage2 from '../assets/banners/slider_image2.png';
-import commandezImage from '../assets/banners/Commandez.png';
-import driveLifestyleImage from '../assets/products/boum-drive-lifestyle.jpg';
+// Round views down to the nearest 100K bucket for a self-maintaining
+// "{n}K+ vues" stat. Currently ~516K → displays "500K+".
+const tiktokViewsKMarketed = Math.floor(TOTAL_TIKTOK_VIEWS / 100000) * 100;
 
-const optSliderImage2 = await getImage({ src: sliderImage2, format: 'webp' });
-const optCommandezImage = await getImage({ src: commandezImage, format: 'webp' });
-const optDriveLifestyleImage = await getImage({ src: driveLifestyleImage, format: 'webp' });
-const heroImages = [optSliderImage2.src, optCommandezImage.src, optDriveLifestyleImage.src];
+// Hero slide images (passed to HeroRotator, which has its own SLIDES_BASE
+// copy). slide 3 was `boum-drive-lifestyle.jpg` but that file is actually
+// a scanned menu board with consumer-facing prices (7,50€ → 10€) — boss
+// feedback 2026-05-04 explicitly banned prices on the marketing site.
+// Replaced with the cinematic New Jersey burger close-up (newspaper
+// backdrop, bokeh gold lighting). See log.md 2026-05-18 entry.
+const heroImages = [
+  '/assets/banners/slider_image2.png',
+  '/assets/banners/Commandez.png',
+  '/assets/products/burger-new-jersey.jpg',
+];
 
 const title =
   'Mon Boum Toulouse — Fast-Food Halal Depuis 2004 | Burger, Pizza, Chicken';
@@ -317,13 +330,22 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
   <section class="bg-white py-20 md:py-28">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        {/* Previous image was BOUM-BURGER-SINCE.png. Issues : (a) the logo  */}
+        {/* says "Depuis 2008" — Boum Burger enseigne launch date, while    */}
+        {/* the site frame says "Mon Boum depuis 2004" (group founding) so  */}
+        {/* it created a visible year contradiction; (b) it's Boum Burger-  */}
+        {/* branded on a TRANSVERSAL qualité section that speaks for the    */}
+        {/* whole group. Swapped to the Wall Street hero close-up (clean,   */}
+        {/* no prices, professional food photography) — anchors the         */}
+        {/* "qualité" claim on the flagship product instead of a branded    */}
+        {/* logo. See log.md 2026-05-18 for the full image audit.           */}
         <div class="order-2 lg:order-1 relative" data-reveal>
           <img
-            src="/assets/banners/BOUM-BURGER-SINCE.png"
-            alt="Qualité Mon Boum depuis 2004"
-            class="w-full h-auto max-w-lg mx-auto"
-            width="635"
-            height="376"
+            src="/assets/products/burger-wallstreet.jpg"
+            alt="Wall Street — burger signature halal Mon Boum"
+            class="w-full h-auto max-w-lg mx-auto rounded-sm shadow-2xl"
+            width="1024"
+            height="683"
             loading="lazy"
             decoding="async"
           />
@@ -469,12 +491,12 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
         </div>
 
         <div class="relative" data-reveal data-d="2">
-          <Image
-            src={commandezImage}
+          <img
+            src="/assets/banners/Commandez.png"
             alt="Livraison Deliveroo — Mon Boum"
             class="w-full h-auto max-w-md mx-auto float-anim"
-            width={1263}
-            height={2578}
+            width="1263"
+            height="2578"
             loading="lazy"
             decoding="async"
           />
@@ -484,6 +506,8 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
   </section>
 
   {/* ═══════════════ 6. PROMOS (scroller) ═══════════════ */}
+  {/* Body copy aligned to PROMOS.length (no drift if data changes).      */}
+  {/* H2 expanded from "Nos promos." (8 chars, lonely) to a 2-line claim. */}
   <section class="bg-gris py-20 md:py-28">
     <div class="container-wide mb-12">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end" data-reveal>
@@ -492,12 +516,15 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
             Offres du moment
           </p>
           <h2 class="font-display text-4xl md:text-5xl text-noir uppercase leading-none mb-4 lg:mb-0">
-            Nos <span class="text-rouge">promos.</span>
+            Les deals<br />
+            <span class="text-rouge">qui régalent.</span>
           </h2>
         </div>
         <div class="lg:text-right">
           <p class="font-body text-base md:text-lg text-noir/70 leading-relaxed max-w-md ml-auto mb-6 lg:mb-0">
-            Les meilleurs deals pour les grosses faims. De la pizza géante offerte au burger offert, on régale la Boum Team. Uniquement sur Deliveroo.
+            <strong>{PROMOS.length} deals</strong> en ce moment sur Deliveroo.
+            De la pizza géante au tacos, du milkshake au combo Mon Boum —
+            pour les grosses faims comme les petits creux. Sur Deliveroo. Point.
           </p>
         </div>
       </div>
@@ -511,6 +538,9 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
   <GrungeSeparator fromDark={false} />
 
   {/* ═══════════════ 7. TÉMOIGNAGES ═══════════════ */}
+  {/* H2 expanded ("Validé." 7 chars → 2 lines). Body realigned to the    */}
+  {/* actual data : 11 verbatim celebrity quotes scraped from monboum.fr. */}
+  {/* No more "milliers d'avis" / "Boum Team" mention (was drift).        */}
   <section class="texture-bg py-20 md:py-28 relative overflow-hidden">
     <img
       src="/assets/shapes/shape1-min.png"
@@ -525,10 +555,13 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
           Ils nous ont
         </p>
         <h2 class="font-display text-5xl md:text-6xl text-white uppercase leading-none mb-6">
-          Validé.
+          Validé.<br />
+          <span class="text-rouge">Et pas qu'un peu.</span>
         </h2>
         <p class="font-body text-base md:text-lg text-white/70 leading-relaxed">
-          La Boum Team parle pour nous. Des milliers d'avis qui confirment une seule chose : la meilleure street-food halal de Toulouse, c'est ici.
+          <strong class="text-white">{TESTIMONIALS.length} artistes français</strong>
+          sont passés à Toulouse pour goûter. Tous ont posé devant l'objectif
+          pour dire la même chose : c'est bon, c'est lourd, c'est Mon Boum.
         </p>
       </div>
 
@@ -541,18 +574,25 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
   <GrungeSeparator fromDark={true} />
 
   {/* ═══════════════ 8. TIKTOKS ═══════════════ */}
+  {/* H2 specialised : "Réseaux sociaux" (plural) was drift (only TikTok    */}
+  {/* shown). Body now anchors on the real stat — sum of view_counts from  */}
+  {/* tiktok-local.json (auto-syncs on next `npm run sync:tiktok`).        */}
   <section class="bg-white py-20 md:py-28">
     <div class="container-wide">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end mb-16" data-reveal>
         <div>
           <p class="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Suivez-nous
+            Sur TikTok
           </p>
           <h2 class="font-display text-5xl md:text-6xl text-noir uppercase leading-none mb-4">
-            Réseaux <span class="text-rouge">sociaux.</span>
+            On poste.<br />
+            <span class="text-rouge">Vous likez.</span>
           </h2>
           <p class="font-body text-base md:text-lg text-noir/70 leading-relaxed max-w-md">
-            Rejoignez la Boum Team sur TikTok. Du food-porn, des backstages, des exclus et de la bonne humeur toulousaine.
+            <strong>{tiktokViewsKMarketed}K+ vues</strong> cumulées sur nos
+            {TIKTOKS.length === 1 ? 'top vidéo' : `${TIKTOKS.length} top vidéos`}.
+            Du naan kebab à la pizza géante en passant par la Box du peuple —
+            la street toulousaine sur votre écran.
           </p>
         </div>
         <div class="lg:text-right">
@@ -574,5 +614,3 @@ const enseigneCards = Object.values(ENSEIGNES).map((e) => {
     </div>
   </section>
 </Layout>
-
-

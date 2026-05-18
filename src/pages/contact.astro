@@ -5,6 +5,7 @@
 import Layout from '../layouts/Layout.astro';
 import GrungeSeparator from '../components/GrungeSeparator.astro';
 import ContactForm from '../components/islands/ContactForm.jsx';
+import { TOTAL_RESTAURANTS } from '../data/restaurants.js';
 
 const title = 'Contact — Mon Boum Toulouse';
 const description =
@@ -94,7 +95,7 @@ const description =
                 href="/nos-restaurants"
                 class="inline-block font-body text-sm text-noir border-b-2 border-rouge pb-1 hover:text-rouge transition-colors"
               >
-                Voir les 10 adresses →
+                Voir les {TOTAL_RESTAURANTS} adresses →
               </a>
             </div>
 
@@ -163,8 +164,8 @@ const description =
         Rejoignez <span class="text-rouge">Mon Boum</span>.
       </h2>
       <p class="font-body text-noir/70 max-w-xl mx-auto mb-8" data-reveal data-d="3">
-        Un concept éprouvé, 10 restaurants ouverts depuis 2004. Découvrez notre
-        programme de franchise.
+        Un concept éprouvé, {TOTAL_RESTAURANTS} restaurants ouverts depuis 2004.
+        Découvrez notre programme de franchise.
       </p>
       <a
         href="/formulaire-de-candidature"

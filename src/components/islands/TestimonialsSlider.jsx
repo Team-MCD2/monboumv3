@@ -19,7 +19,8 @@ function TestimonialsFallback() {
         <img src={first.photo} alt={first.name} className="w-full h-full object-cover" />
       </div>
       <div>
-        <p className="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">Ils nous ont validé</p>
+        {/* Eyebrow removed 2026-05-18 — section header in index.astro */}
+        {/* already says "Ils nous ont / Validé." — no DRY duplication. */}
         <blockquote className="font-display text-3xl md:text-4xl text-white uppercase leading-tight mb-6">
           <span className="text-rouge">"</span>{first.quote}<span className="text-rouge">"</span>
         </blockquote>
@@ -95,9 +96,7 @@ function TestimonialsSliderImpl() {
           className="relative"
           style={{ transition: 'opacity 0.5s ease' }}
         >
-          <p className="font-body text-xs text-rouge uppercase tracking-[0.3em] mb-4">
-            Ils nous ont validé
-          </p>
+          {/* Eyebrow removed 2026-05-18 — see fallback comment. */}
           <blockquote className="font-display text-3xl md:text-4xl text-white uppercase leading-tight mb-6">
             <span className="text-rouge">"</span>
             {entry.quote}

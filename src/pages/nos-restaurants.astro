@@ -75,8 +75,9 @@ const schema = buildAllRestaurantsGraph(Astro.site?.toString() || 'https://mon-b
         Nos <span class="text-rouge">{TOTAL_RESTAURANTS} restaurants</span>.
       </h1>
       <p class="rise-3 font-body text-white/70 text-lg md:text-xl mt-8 max-w-2xl">
-        Retrouvez le Boum le plus proche de chez vous — <strong class="text-white">4 enseignes</strong>
-        pour se régaler à Toulouse, Colomiers, Aucamville et Mermoz.
+        Retrouvez le Boum le plus proche de chez vous — <strong class="text-white">4 enseignes</strong>,
+        <strong class="text-white"> {TOTAL_RESTAURANTS} adresses</strong>, de Toulouse à Colomiers.
+        Filtrez par enseigne ci-dessous, ou cliquez sur la carte.
       </p>
     </div>
   </section>
